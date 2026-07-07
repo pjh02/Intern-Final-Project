@@ -1,138 +1,759 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>DRAM Fail Mechanism & Reliability Analysis</title>
-
+    <title>DRAM Fail Mechanism 시각화</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Navigation -->
-    <header>
-        <nav>
-            <h1>DRAM Reliability Analysis</h1>
+    <!-- =========================================================
+         상단 메뉴
+         ========================================================= -->
+    <header class="top-nav">
+        <div class="logo">DRAM Fail Mechanism</div>
 
-            <ul>
-                <li><a href="#intro">Introduction</a></li>
-                <li><a href="#structure">DRAM Structure</a></li>
-                <li><a href="#scaling">Scaling Issues</a></li>
-                <li><a href="#failure">Fail Mechanisms</a></li>
-                <li><a href="#demo">Interactive Demo</a></li>
-                <li><a href="#conclusion">Conclusion</a></li>
-            </ul>
+        <nav>
+            <a href="#" class="nav-link active-nav" data-page="overview">개요</a>
+            <a href="#" class="nav-link" data-page="gidl">GIDL</a>
+            <a href="#" class="nav-link" data-page="gijl">GIJL</a>
+            <a href="#" class="nav-link" data-page="next">다음 항목</a>
         </nav>
     </header>
 
+    <main>
 
-    <!-- Hero -->
-    <section id="hero">
+        <!-- =========================================================
+             개요
+             ========================================================= -->
+        <section id="overview" class="page active-page section hero-section">
 
-        <div class="hero-content">
+            <div class="hero-text">
+                <p class="eyebrow">Interactive Visualization Demo</p>
 
-            <h1>
-                DRAM Fail Mechanism<br>
-                & Reliability Analysis
-            </h1>
+                <h1>
+                    DRAM Fail Mechanism<br>
+                    시각화 Demo
+                </h1>
 
-            <p>
-                Interactive Visualization using Generative AI
-            </p>
+                <p class="hero-description">
+                    DRAM의 주요 fail mechanism을 직관적으로 설명하기 위한
+                    인터랙티브 웹페이지입니다.
+                    현재는 GIDL(Gate Induced Drain Leakage)을 먼저 구현했습니다.
+                </p>
+            </div>
 
-        </div>
+            <div class="mechanism-grid">
+                <div class="mechanism-card page-card active-card" data-page="gidl">
+                    <span>01</span>
+                    <h3>GIDL</h3>
+                    <p>Gate Induced Drain Leakage</p>
+                </div>
 
-    </section>
+                <div class="mechanism-card page-card" data-page="gijl">
+                    <span>02</span>
+                    <h3>GIJL</h3>
+                    <p>Gate Induced Junction Leakage</p>
+                </div>
 
+                <div class="mechanism-card page-card" data-page="pge">
+                    <span>03</span>
+                    <h3>PGE</h3>
+                    <p>Pass Gate Effect</p>
+                </div>
 
-    <!-- Introduction -->
-    <section id="intro">
+                <div class="mechanism-card">
+                    <span>04</span>
+                    <h3>1-RD</h3>
+                    <p>1-Row Disturb</p>
+                </div>
 
-        <h2>Introduction</h2>
+                <div class="mechanism-card">
+                    <span>05</span>
+                    <h3>tRDL</h3>
+                    <p>Write & Fail Timing Issue</p>
+                </div>
+            </div>
 
-        <div class="content">
-
-        </div>
-
-    </section>
-
-
-    <!-- DRAM Structure -->
-    <section id="structure">
-
-        <h2>DRAM Structure & Operation</h2>
-
-        <div class="content">
-
-        </div>
-
-    </section>
-
-
-    <!-- Scaling -->
-    <section id="scaling">
-
-        <h2>Scaling Issues</h2>
-
-        <div class="content">
-
-        </div>
-
-    </section>
-
-
-    <!-- Fail Mechanisms -->
-    <section id="failure">
-
-        <h2>Major Fail Mechanisms</h2>
-
-        <div class="content">
-
-        </div>
-
-    </section>
+        </section>
 
 
-    <!-- Demo -->
-    <section id="demo">
+        <!-- =========================================================
+             GIDL Section
+             ========================================================= -->
+        <section id="gidl" class="page section gidl-section">
 
-        <h2>Interactive Visualization</h2>
+            <div class="section-title">
+                <p class="eyebrow">Static Fail Mechanism</p>
+                <h2 class="nowrap-title">GIDL: Gate Induced Drain Leakage</h2>
+                <p>
+                    GIDL은 셀 트랜지스터가 OFF 상태일 때 gate-drain 인접 영역에서 강한 전계가 형성되고,
+                    이 전계로 인해 band-to-band tunneling이 유도되어 원치 않는 누설 전류가 발생하는 현상입니다.
+                </p>
+            </div>
 
-        <div class="content">
+            <div class="gidl-layout">
 
-        </div>
+                <!-- =====================================================
+                     왼쪽: 시각화 영역
+                     ===================================================== -->
+                <div class="visual-panel">
 
-    </section>
+                    <div class="panel-header">
+                        <div>
+                            <h3>GIDL 누설 위치 및 전자 이동</h3>
+                            <p id="gidl-status-text">버튼을 누르면 GIDL 누설 경로가 표시됩니다.</p>
+                        </div>
+
+                        <div id="state-badge" class="state-badge">OFF 상태</div>
+                    </div>
+
+                    <!-- =====================================================
+                         GIDL 시각화 도면
+                         - 실제 상용 DRAM 단면을 그대로 재현한 것이 아니라
+                           발표용 설명을 위한 단순화된 교육용 도식
+                         ===================================================== -->
+                    <svg id="gidl-svg" viewBox="0 0 1100 620" aria-label="GIDL leakage animation">
+
+                        <defs>
+                            <!-- 파란 화살표: gate-drain 사이 전계 방향 표시 -->
+                            <marker id="blue-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"></path>
+                            </marker>
+
+                            <!-- 빨간 화살표: leakage 방향 표시 -->
+                            <marker id="red-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"></path>
+                            </marker>
+
+                            <!-- 전자, hotspot glow 효과 -->
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+                                <feMerge>
+                                    <feMergeNode in="blur"></feMergeNode>
+                                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                                </feMerge>
+                            </filter>
+
+                            <!-- 공핍영역 패턴 -->
+                            <pattern id="depletionPattern" width="8" height="8" patternUnits="userSpaceOnUse"
+                                patternTransform="rotate(35)">
+                                <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="2"></line>
+                            </pattern>
+                        </defs>
+
+                        <!-- 전체 도면 배경 -->
+                        <rect x="30" y="30" width="1040" height="560" rx="24" class="figure-bg"></rect>
+
+                        <!-- =================================================
+                             1. Gate / Wordline + Gate Oxide
+                             ================================================= -->
+                        <line x1="540" y1="70" x2="540" y2="110" class="terminal-line"></line>
+                        <circle cx="540" cy="64" r="5" class="terminal-dot"></circle>
+                        <text x="527" y="50" class="figure-title">Vg</text>
+
+                        <rect x="420" y="110" width="240" height="78" rx="4" class="gate-block"></rect>
+                        <text x="500" y="150" class="figure-label-dark">Gate</text>
+                        <text x="500" y="174" class="mini-label">Wordline</text>
+
+                        <!-- Gate oxide: gate 바로 아래 얇은 산화막 -->
+                        <rect x="420" y="188" width="240" height="18" rx="2" class="oxide-strip"></rect>
+                        <text x="498" y="202" class="oxide-text">Gate Oxide</text>
+
+                        <!-- =================================================
+                             2. Bitline / Source Terminal
+                             ================================================= -->
+                        <line x1="315" y1="80" x2="315" y2="218" class="terminal-line"></line>
+                        <circle cx="315" cy="74" r="5" class="terminal-dot"></circle>
+                        <text x="275" y="60" class="side-label">Bitline</text>
+                        <line x1="315" y1="218" x2="315" y2="242" class="terminal-line"></line>
+
+                        <!-- =================================================
+                             3. Drain / Storage Node / Cell Capacitor
+                             ================================================= -->
+                        <!-- Storage node / Drain contact -->
+                        <line x1="760" y1="138" x2="760" y2="242" class="terminal-line"></line>
+                        <circle cx="760" cy="132" r="5" class="terminal-dot"></circle>
+                        <text x="785" y="122" class="side-label">Storage Node</text>
+
+                        <!-- Storage node line: drain 위쪽으로 capacitor 연결 -->
+                        <line x1="760" y1="138" x2="760" y2="98" class="storage-wire"></line>
+
+                        <!-- Cell capacitor: drain 위쪽 -->
+                        <line x1="705" y1="72" x2="815" y2="72" class="capacitor-line"></line>
+                        <line x1="705" y1="96" x2="815" y2="96" class="capacitor-line"></line>
+                        <line x1="760" y1="96" x2="760" y2="118" class="storage-wire"></line>
+
+                        <text x="682" y="54" class="figure-label-dark small-figure-text">Cell Capacitor</text>
+
+                        <!-- Capacitor 내부 저장 전하 -->
+                        <g id="stored-charge">
+                            <circle class="stored-charge c1" cx="725" cy="80" r="6"></circle>
+                            <circle class="stored-charge c2" cx="748" cy="80" r="6"></circle>
+                            <circle class="stored-charge c3" cx="771" cy="80" r="6"></circle>
+                            <circle class="stored-charge c4" cx="794" cy="80" r="6"></circle>
+                        </g>
+
+                        <!-- =================================================
+                             4. P-type Substrate
+                             ================================================= -->
+                        <path class="substrate-body" d="M250 242
+                               L420 242
+                               L420 206
+                               L660 206
+                               L660 242
+                               L850 242
+                               L850 500
+                               L250 500
+                               Z">
+                        </path>
+
+                        <text x="290" y="474" class="substrate-label">P-type Substrate</text>
+
+                        <!-- substrate ground -->
+                        <line x1="540" y1="500" x2="540" y2="548" class="ground-line"></line>
+                        <line x1="522" y1="548" x2="558" y2="548" class="ground-line"></line>
+                        <line x1="528" y1="556" x2="552" y2="556" class="ground-line"></line>
+                        <line x1="534" y1="564" x2="546" y2="564" class="ground-line"></line>
+
+                        <!-- =================================================
+                             5. Source / Drain n+ Diffusion
+                             ================================================= -->
+                        <path class="sd-block source-block" d="M250 242
+                               L420 242
+                               L420 338
+                               Q420 365 390 365
+                               L250 365
+                               Z">
+                        </path>
+                        <text x="305" y="305" class="figure-label-white">Source</text>
+
+                        <path class="sd-block drain-block" d="M660 242
+                               L850 242
+                               L850 365
+                               L705 365
+                               Q660 365 660 322
+                               Z">
+                        </path>
+                        <text x="705" y="306" class="figure-label-white">Drain (n+)</text>
+
+                        <!-- =================================================
+                             6. Drain 쪽 공핍영역
+                             - GIDL은 drain side gate edge가 핵심이므로 drain 쪽을 더 크게 강조
+                             ================================================= -->
+
+                        <path class="depletion-zone drain-depletion" d="M660 280
+                               Q710 232 775 255
+                               Q830 275 850 365
+                               L850 430
+                               L690 430
+                               Q646 395 646 345
+                               Q646 310 660 280
+                               Z">
+                        </path>
+                        <text x="675" y="392" class="depletion-label strong">Drain 측 공핍영역</text>
+
+                        <!-- =================================================
+                             7. Gate 아래 Channel 영역
+                             ================================================= -->
+                        <path class="channel-line" d="M420 350 C490 378, 590 378, 660 350">
+                        </path>
+                        <text x="468" y="392" class="mini-label">Gate 아래 channel 영역</text>
+
+                        <!-- =================================================
+                             8. GIDL Hot Spot
+                             - gate edge와 drain junction이 만나는 부근
+                             ================================================= -->
+                        <ellipse id="hotspot" cx="662" cy="238" rx="46" ry="30" class="hotspot"></ellipse>
+                        <text x="646" y="244" class="hotspot-dot-text">●●●</text>
+
+                        <text x="712" y="242" class="svg-small hotspot-label">GIDL 발생 영역</text>
+                        <text x="712" y="262" class="svg-small hotspot-label">Gate-Drain overlap</text>
+
+                        <path d="M692 240 C735 236, 772 228, 810 218" class="hotspot-pointer"></path>
+
+                        <!-- =================================================
+                             9. Electric Field Arrows
+                             ================================================= -->
+                        <line x1="620" y1="208" x2="660" y2="238" class="field-arrow" marker-end="url(#blue-arrow)">
+                        </line>
+                        <line x1="642" y1="208" x2="676" y2="244" class="field-arrow" marker-end="url(#blue-arrow)">
+                        </line>
+                        <line x1="660" y1="216" x2="694" y2="258" class="field-arrow" marker-end="url(#blue-arrow)">
+                        </line>
+
+                        <!-- =================================================
+                             10. Leakage Path
+                             - capacitor/storage node → drain → gate-drain overlap 방향
+                             ================================================= -->
+                        <path id="leakage-path" d="M760 80
+                               C760 125, 760 180, 760 242
+                               C725 244, 690 242, 662 238" class="leakage-path" marker-end="url(#red-arrow)">
+                        </path>
+
+                        <circle class="leakage-electron e1" cx="760" cy="80" r="5"></circle>
+                        <circle class="leakage-electron e2" cx="760" cy="80" r="5"></circle>
+                        <circle class="leakage-electron e3" cx="760" cy="80" r="5"></circle>
+
+                        <!-- =================================================
+                             11. BTBT 보조 그림
+                             ================================================= -->
+                        <g id="band-box">
+                            <rect x="880" y="382" width="185" height="145" rx="18" class="band-panel"></rect>
+
+                            <text x="904" y="412" class="figure-label-dark small-figure-text">BTBT 개념</text>
+
+                            <path d="M910 455 C940 428, 970 428, 1030 405" class="band-line conduction"></path>
+                            <text x="906" y="438" class="mini-label">전도대</text>
+
+                            <path d="M910 494 C945 522, 985 514, 1035 490" class="band-line valence"></path>
+                            <text x="906" y="522" class="mini-label">가전자대</text>
+
+                            <path id="btbt-arrow" d="M940 489 C955 468, 980 440, 1006 414" class="btbt-arrow"
+                                marker-end="url(#red-arrow)">
+                            </path>
+
+                            <circle class="btbt-electron" cx="940" cy="489" r="5"></circle>
+                            <text x="978" y="510" class="mini-label btbt-text">전자 터널링</text>
+                        </g>
+
+                    </svg>
+
+                    <div class="figure-caption">
+                        * 실제 상용 DRAM 단면 구조를 그대로 재현한 것이 아니라,
+                        GIDL이 발생하는 위치와 누설 방향을 설명하기 위한 교육용 단순화 도식입니다.
+                    </div>
+
+                </div>
 
 
-    <!-- Conclusion -->
-    <section id="conclusion">
+                <!-- =====================================================
+                     오른쪽: 설명 및 제어 영역
+                     ===================================================== -->
+                <div class="control-panel">
 
-        <h2>Conclusion</h2>
+                    <h3>GIDL 핵심 설명</h3>
 
-        <div class="content">
+                    <div class="info-box">
+                        <h4>1. OFF 상태</h4>
+                        <p>
+                            Wordline이 OFF이면 access transistor는 꺼져 있어야 하며,
+                            셀 캐패시터에 저장된 전하는 유지되어야 합니다.
+                        </p>
+                    </div>
 
-        </div>
+                    <div class="info-box">
+                        <h4>2. 전계 집중</h4>
+                        <p>
+                            하지만 gate와 drain이 가까운 overlap 영역에서는
+                            국부적으로 강한 electric field가 형성될 수 있습니다.
+                        </p>
+                    </div>
 
-    </section>
+                    <div class="info-box">
+                        <h4>3. 누설 발생</h4>
+                        <p>
+                            이 강한 전계는 band-to-band tunneling을 유도하고,
+                            그 결과 OFF 상태에서도 leakage current가 발생하여
+                            저장 전하가 감소할 수 있습니다.
+                        </p>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="play-leakage-btn" class="primary-btn">
+                            GIDL 누설 애니메이션 실행
+                        </button>
+
+                        <button id="reset-gidl-btn" class="secondary-btn">
+                            초기화
+                        </button>
+                    </div>
+
+                    <div class="note-box">
+                        <h4>발표할 때 핵심 문장</h4>
+                        <p>
+                            “GIDL은 트랜지스터가 OFF 상태임에도
+                            gate-drain 인접영역의 강한 전계 때문에 누설이 발생하고,
+                            결과적으로 저장 전하가 줄어들어 retention 특성을 악화시키는 현상입니다.”
+                        </p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>발표 시 주의할 점</h4>
+                        <p>
+                            이 그림은 실제 상용 DRAM 구조를 100% 동일하게 그린 것이 아니라,
+                            GIDL의 핵심 메커니즘을 직관적으로 설명하기 위한 시각화 자료라고 설명하면 됩니다.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+        <!-- =========================================================
+     GIJL Section
+     ========================================================= -->
+        <section id="gijl" class="page section gijl-section">
+
+            <div class="section-title">
+                <p class="eyebrow">Static Fail Mechanism</p>
+                <h2 class="nowrap-title">GIJL: Gate Induced Junction Leakage</h2>
+                <p>
+                    GIJL은 gate bias에 의해 junction 주변의 electric field가 증가하면서
+                    source/drain junction에서 발생하는 누설 전류입니다.
+                    DRAM cell에서는 storage node와 연결된 drain junction을 통해 저장 전하가
+                    기판 방향으로 빠져나가 retention 특성을 악화시킬 수 있습니다.
+                </p>
+            </div>
+
+            <div class="gijl-layout">
+
+                <!-- =====================================================
+             왼쪽: GIJL 시각화 영역
+             ===================================================== -->
+                <div class="visual-panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>GIJL 누설 위치 및 전자 이동</h3>
+                            <p id="gijl-status-text">버튼을 누르면 junction leakage 경로가 표시됩니다.</p>
+                        </div>
+
+                        <div id="gijl-state-badge" class="state-badge">OFF 상태</div>
+                    </div>
+
+                    <!-- =====================================================
+                 GIJL SVG 시각화 도면
+                 - GIDL과 달리 gate-drain overlap hot spot보다
+                   drain junction depletion region을 중심으로 표현
+                 ===================================================== -->
+                    <svg id="gijl-svg" viewBox="0 0 1100 620" aria-label="GIJL leakage animation">
+
+                        <defs>
+                            <!-- 파란 화살표: 전계 방향 -->
+                            <marker id="gijl-blue-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
+                                orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"></path>
+                            </marker>
+
+                            <!-- 빨간 화살표: junction leakage 방향 -->
+                            <marker id="gijl-red-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
+                                orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"></path>
+                            </marker>
+
+                            <!-- glow 효과 -->
+                            <filter id="gijl-glow">
+                                <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+                                <feMerge>
+                                    <feMergeNode in="blur"></feMergeNode>
+                                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                                </feMerge>
+                            </filter>
+
+                            <!-- 공핍영역 패턴 -->
+                            <pattern id="gijl-depletion-pattern" width="8" height="8" patternUnits="userSpaceOnUse"
+                                patternTransform="rotate(35)">
+                                <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="2"></line>
+                            </pattern>
+                        </defs>
+
+                        <!-- 전체 도면 배경 -->
+                        <rect x="30" y="30" width="1040" height="560" rx="24" class="figure-bg"></rect>
 
 
-    <!-- Footer -->
-    <footer>
+                        <!-- =================================================
+                     1. Gate / Wordline
+                     ================================================= -->
 
-        <p>
-            Samsung Electronics DS Memory Division<br>
-            DRAM Product Engineering Internship Project
-        </p>
+                        <!-- Gate terminal -->
+                        <line x1="540" y1="70" x2="540" y2="110" class="terminal-line"></line>
+                        <circle cx="540" cy="64" r="5" class="terminal-dot"></circle>
+                        <text x="527" y="50" class="figure-title">Vg</text>
 
-    </footer>
+                        <!-- Gate electrode -->
+                        <rect x="420" y="110" width="240" height="78" rx="4" class="gate-block"></rect>
+                        <text x="500" y="150" class="figure-label-dark">Gate</text>
+                        <text x="500" y="174" class="mini-label">Wordline</text>
 
+                        <!-- Gate oxide -->
+                        <rect x="420" y="188" width="240" height="18" rx="2" class="oxide-strip"></rect>
+                        <text x="498" y="202" class="oxide-text">Gate Oxide</text>
+
+
+                        <!-- =================================================
+                     2. Bitline / Source terminal
+                     ================================================= -->
+
+                        <line x1="315" y1="80" x2="315" y2="242" class="terminal-line"></line>
+                        <circle cx="315" cy="74" r="5" class="terminal-dot"></circle>
+                        <text x="275" y="60" class="side-label">Bitline</text>
+
+
+                        <!-- =================================================
+                     3. Storage Node / Cell Capacitor
+                     ================================================= -->
+
+                        <!-- Storage node contact -->
+                        <line x1="760" y1="138" x2="760" y2="242" class="terminal-line"></line>
+                        <circle cx="760" cy="132" r="5" class="terminal-dot"></circle>
+                        <text x="785" y="122" class="side-label">Storage Node</text>
+
+                        <!-- Drain 위쪽 capacitor 연결 -->
+                        <line x1="760" y1="138" x2="760" y2="98" class="storage-wire"></line>
+
+                        <!-- Cell capacitor -->
+                        <line x1="705" y1="72" x2="815" y2="72" class="capacitor-line"></line>
+                        <line x1="705" y1="96" x2="815" y2="96" class="capacitor-line"></line>
+                        <line x1="760" y1="96" x2="760" y2="118" class="storage-wire"></line>
+
+                        <text x="682" y="54" class="figure-label-dark small-figure-text">Cell Capacitor</text>
+
+                        <!-- 저장 전하 -->
+                        <g id="gijl-stored-charge">
+                            <circle class="gijl-stored-charge c1" cx="725" cy="84" r="6"></circle>
+                            <circle class="gijl-stored-charge c2" cx="748" cy="84" r="6"></circle>
+                            <circle class="gijl-stored-charge c3" cx="771" cy="84" r="6"></circle>
+                            <circle class="gijl-stored-charge c4" cx="794" cy="84" r="6"></circle>
+                        </g>
+
+
+                        <!-- =================================================
+                     4. P-type substrate
+                     ================================================= -->
+
+                        <path class="substrate-body" d="M250 242
+                       L420 242
+                       L420 206
+                       L660 206
+                       L660 242
+                       L850 242
+                       L850 500
+                       L250 500
+                       Z">
+                        </path>
+
+                        <text x="290" y="474" class="substrate-label">P-type Substrate</text>
+
+                        <!-- substrate ground -->
+                        <line x1="540" y1="500" x2="540" y2="548" class="ground-line"></line>
+                        <line x1="522" y1="548" x2="558" y2="548" class="ground-line"></line>
+                        <line x1="528" y1="556" x2="552" y2="556" class="ground-line"></line>
+                        <line x1="534" y1="564" x2="546" y2="564" class="ground-line"></line>
+
+
+                        <!-- =================================================
+                     5. Source / Drain n+ diffusion
+                     ================================================= -->
+
+                        <!-- Source diffusion -->
+                        <path class="sd-block source-block" d="M250 242
+                       L420 242
+                       L420 338
+                       Q420 365 390 365
+                       L250 365
+                       Z">
+                        </path>
+                        <text x="305" y="305" class="figure-label-white">Source</text>
+
+                        <!-- Drain diffusion -->
+                        <path class="sd-block drain-block" d="M660 242
+                       L850 242
+                       L850 365
+                       L705 365
+                       Q660 365 660 322
+                       Z">
+                        </path>
+                        <text x="705" y="306" class="figure-label-white">Drain (n+)</text>
+
+
+                        <!-- =================================================
+                     6. Drain junction depletion region
+                     - GIJL에서는 gate-drain overlap보다 junction 주변 공핍영역을 강조
+                     ================================================= -->
+
+                        <path class="gijl-junction-depletion" d="M660 278
+                       Q710 235 775 258
+                       Q830 278 850 365
+                       L850 438
+                       L690 438
+                       Q640 398 640 345
+                       Q640 310 660 278
+                       Z">
+                        </path>
+
+                        <text x="675" y="405" class="depletion-label strong">Drain junction 공핍영역</text>
+
+
+                        <!-- =================================================
+                     7. Channel region
+                     ================================================= -->
+
+                        <path class="channel-line" d="M420 350 C490 378, 590 378, 660 350">
+                        </path>
+
+                        <text x="468" y="392" class="mini-label">Gate 아래 channel 영역</text>
+
+
+                        <!-- =================================================
+                     8. GIJL 강조 영역
+                     - junction boundary에서 leakage가 발생하는 느낌
+                     ================================================= -->
+
+                        <ellipse id="gijl-hotspot" cx="708" cy="350" rx="72" ry="45" class="gijl-hotspot"></ellipse>
+
+                        <text x="730" y="332" class="svg-small gijl-hotspot-label">Junction Leakage 발생 영역</text>
+                        <text x="730" y="352" class="svg-small gijl-hotspot-label">Drain junction edge</text>
+
+                        <path d="M718 350 C760 350, 795 348, 830 342" class="gijl-hotspot-pointer"></path>
+
+
+                        <!-- =================================================
+                     9. Junction electric field arrows
+                     - drain junction에서 substrate 방향으로 전계 집중 표현
+                     ================================================= -->
+
+                        <line x1="705" y1="295" x2="705" y2="345" class="gijl-field-arrow"
+                            marker-end="url(#gijl-blue-arrow)">
+                        </line>
+
+                        <line x1="735" y1="305" x2="720" y2="360" class="gijl-field-arrow"
+                            marker-end="url(#gijl-blue-arrow)">
+                        </line>
+
+                        <line x1="765" y1="320" x2="735" y2="378" class="gijl-field-arrow"
+                            marker-end="url(#gijl-blue-arrow)">
+                        </line>
+
+
+                        <!-- =================================================
+                     10. GIJL Leakage path
+                     - Storage node / drain diffusion에서
+                       junction depletion region을 거쳐 substrate 쪽으로 빠지는 흐름
+                     ================================================= -->
+
+                        <path id="gijl-leakage-path" d="M760 84
+                       C760 135, 760 195, 760 242
+                       C748 285, 730 325, 705 360
+                       C680 395, 650 430, 615 460" class="gijl-leakage-path" marker-end="url(#gijl-red-arrow)">
+                        </path>
+
+                        <!-- 누설 전자 -->
+                        <circle class="gijl-leakage-electron ge1" cx="760" cy="84" r="5"></circle>
+                        <circle class="gijl-leakage-electron ge2" cx="760" cy="84" r="5"></circle>
+                        <circle class="gijl-leakage-electron ge3" cx="760" cy="84" r="5"></circle>
+
+
+                        <!-- =================================================
+                     11. 설명용 작은 화살표/문구
+                     ================================================= -->
+
+                        <text x="595" y="520" class="mini-label">
+                            저장 전하가 drain junction을 통해 substrate 방향으로 누설
+                        </text>
+
+                    </svg>
+
+                    <div class="figure-caption">
+                        * GIJL 그림은 실제 상용 DRAM 단면을 그대로 재현한 것이 아니라,
+                        gate bias가 junction depletion region에 미치는 영향과 junction leakage 경로를 설명하기 위한 단순화 도식입니다.
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================================
+             오른쪽: GIJL 설명 및 제어 영역
+             ===================================================== -->
+                <div class="control-panel">
+
+                    <h3>GIJL 핵심 설명</h3>
+
+                    <div class="info-box">
+                        <h4>1. Junction 형성</h4>
+                        <p>
+                            DRAM cell transistor의 source/drain diffusion은 P-type substrate와 PN junction을 형성합니다.
+                            이 junction 주변에는 공핍영역이 존재합니다.
+                        </p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>2. Gate 영향</h4>
+                        <p>
+                            Gate bias가 junction 주변의 전계와 공핍영역에 영향을 주면,
+                            junction leakage가 증가할 수 있습니다.
+                        </p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>3. 저장 전하 감소</h4>
+                        <p>
+                            Storage node와 연결된 drain junction에서 누설이 커지면,
+                            셀 캐패시터에 저장된 전하가 줄어들어 retention fail 가능성이 증가합니다.
+                        </p>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="play-gijl-btn" class="primary-btn">
+                            GIJL 누설 애니메이션 실행
+                        </button>
+
+                        <button id="reset-gijl-btn" class="secondary-btn">
+                            초기화
+                        </button>
+                    </div>
+
+                    <div class="note-box">
+                        <h4>발표할 때 핵심 문장</h4>
+                        <p>
+                            “GIJL은 gate bias가 junction depletion region에 영향을 주면서
+                            source/drain junction의 leakage를 증가시키고,
+                            DRAM에서는 storage node 전하 손실을 통해 retention 특성을 악화시킬 수 있습니다.”
+                        </p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>GIDL과의 차이</h4>
+                        <p>
+                            GIDL은 gate-drain overlap 부근의 강한 전계와 tunneling을 강조하고,
+                            GIJL은 drain junction depletion region을 통한 junction leakage를 강조하면 됩니다.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =========================================================
+             다음 구현 대상
+             ========================================================= -->
+        <section id="next" class="page section placeholder-section">
+
+            <div class="section-title">
+                <p class="eyebrow">Next Implementation</p>
+                <h2>다음 구현 대상</h2>
+                <p>
+                    이후 같은 형식으로 PGE, 1-RD, tRDL을 추가할 예정입니다.
+                </p>
+            </div>
+
+            <div class="placeholder-grid">
+                <div class="placeholder-card">PGE Animation</div>
+                <div class="placeholder-card">1-RD Animation</div>
+                <div class="placeholder-card">tRDL Animation</div>
+            </div>
+
+        </section>
+
+    </main>
 
     <script src="script.js"></script>
-
 </body>
 
 </html>
