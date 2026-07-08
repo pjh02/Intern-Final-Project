@@ -916,20 +916,6 @@ body.gidl-active .btbt-text {
     transition: opacity 0.3s ease;
 }
 
-body.gidl-active .stored-charge {
-    animation: storedChargeBlink 1.5s ease-in-out infinite;
-}
-
-@keyframes storedChargeBlink {
-    0%, 100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.35;
-    }
-}
-
 /* hotspot */
 .hotspot {
     fill: rgba(239, 68, 68, 0.05);
@@ -998,68 +984,31 @@ body.gidl-active .field-arrow {
     opacity: 1;
 }
 
-/* leakage path */
+/* GIDL leakage path 
+- 빨간 전자 dot 이동 대신 
+- Storage node -> gate drain overlap -> body 방향 화살표 흐름으로 표현*/
 .leakage-path {
     fill: none;
     stroke: rgba(239, 68, 68, 0);
-    stroke-width: 4;
-    stroke-dasharray: 10 8;
+    stroke-width: 5;
+    stroke-dasharray: 16 10;
+    stroke-linecap: round;
     transition: stroke 0.25s ease;
 }
 
 body.gidl-active .leakage-path {
     stroke: rgba(239, 68, 68, 0.95);
+    animation: gidLeakageArrowFlow 1.6s linear infinite;
 }
 
-.leakage-electron {
-    fill: #ef4444;
-    opacity: 0;
-    filter: url(#glow);
-}
-
-body.gidl-active .leakage-electron {
-    opacity: 1;
-}
-
-/* 전자 이동 경로: capacitor 위쪽 -> drain -> gate-drain overlap */
-body.gidl-active .e1 {
-    animation: electronLeakageDrainTop 1.9s linear infinite;
-}
-
-body.gidl-active .e2 {
-    animation: electronLeakageDrainTop 1.9s linear infinite 0.45s;
-}
-
-body.gidl-active .e3 {
-    animation: electronLeakageDrainTop 1.9s linear infinite 0.9s;
-}
-
-@keyframes electronLeakageDrainTop {
-    0% {
-        transform: translate(0, 0);
-        opacity: 0;
+/* 화살표 선이 흐르는 느낌 */
+@keyframes gidLeakageArrowFlow {
+    from {
+        stroke-dashoffset: 0;
     }
-
-    12% {
-        opacity: 1;
+    to {
+        stroke-dashoffset: -52;
     }
-
-    45% {
-        transform: translate(0, 133px);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translate(-95px, 136px);
-        opacity: 0;
-    }
-}
-
-/* BTBT 보조 그림 */
-.band-panel {
-    fill: rgba(255, 255, 255, 0.45);
-    stroke: rgba(17, 24, 39, 0.18);
-    stroke-width: 1.5;
 }
 
 .band-line {
@@ -1180,22 +1129,6 @@ body.gidl-active .btbt-text {
     filter: url(#gijl-glow);
     transition: opacity 0.3s ease;
 }
-
-body.gijl-active .gijl-stored-charge {
-    animation: gijlStoredChargeBlink 1.5s ease-in-out infinite;
-}
-
-@keyframes gijlStoredChargeBlink {
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.35;
-    }
-}
-
 
 /* =========================================================
    4. GIJL Drain Junction 공핍영역
