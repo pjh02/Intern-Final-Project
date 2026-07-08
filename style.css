@@ -385,12 +385,10 @@ body.gidl-active .state-badge {
     transition: opacity 0.3s ease;
 }
 
-body.gidl-active .stored-charge {
-    animation: storedChargeBlink 1.5s ease-in-out infinite;
-}
-
 @keyframes storedChargeBlink {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
 
@@ -447,7 +445,9 @@ body.gidl-active .hotspot-pointer {
 }
 
 @keyframes hotspotPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         stroke-width: 2.5;
         opacity: 0.8;
     }
@@ -591,7 +591,9 @@ body.gidl-active .btbt-text {
 }
 
 @keyframes btbtJump {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0);
     }
 
@@ -723,6 +725,7 @@ body.gidl-active .btbt-text {
    ========================================================= */
 
 @media (max-width: 1100px) {
+
     .hero-section,
     .gidl-layout {
         grid-template-columns: 1fr;
@@ -960,7 +963,9 @@ body.gidl-active .hotspot-pointer {
 }
 
 @keyframes hotspotPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         stroke-width: 2.5;
         opacity: 0.8;
     }
@@ -1006,6 +1011,7 @@ body.gidl-active .leakage-path {
     from {
         stroke-dashoffset: 0;
     }
+
     to {
         stroke-dashoffset: -52;
     }
@@ -1056,7 +1062,9 @@ body.gidl-active .btbt-text {
 }
 
 @keyframes btbtJump {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0);
     }
 
@@ -1189,6 +1197,7 @@ body.gijl-active .gijl-hotspot-pointer {
 }
 
 @keyframes gijlHotspotPulse {
+
     0%,
     100% {
         stroke-width: 2.5;
@@ -1371,4 +1380,1142 @@ body.gijl-active #gijl-state-badge {
     transform: translateY(-3px);
     border-color: rgba(56, 189, 248, 0.55);
     box-shadow: 0 0 34px rgba(56, 189, 248, 0.12);
+}
+
+/* =========================================================
+   PGE Section 전용 스타일
+   - Pass Gate Effect
+   - 핵심:
+     1. Victim WL은 OFF
+     2. Passing WL은 ACTIVE
+     3. Passing WL의 전계 간섭으로 victim cell barrier가 낮아짐
+     4. Storage node 전하가 더 쉽게 누설될 수 있음
+   ========================================================= */
+
+
+/* =========================================================
+   1. PGE section 배경
+   ========================================================= */
+
+.pge-section {
+    background:
+        radial-gradient(circle at 18% 12%, rgba(56, 189, 248, 0.10), transparent 28%),
+        radial-gradient(circle at 82% 28%, rgba(168, 85, 247, 0.12), transparent 28%),
+        radial-gradient(circle at 60% 70%, rgba(239, 68, 68, 0.08), transparent 30%),
+        #020617;
+}
+
+.pge-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, 0.65fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   2. PGE SVG 영역
+   ========================================================= */
+
+#pge-svg {
+    width: 100%;
+    min-height: 560px;
+    border-radius: 22px;
+    background: transparent;
+}
+
+#pge-svg .figure-bg {
+    fill: #e5e7eb;
+    stroke: #cbd5e1;
+    stroke-width: 1.5;
+}
+
+
+/* =========================================================
+   3. PGE 저장 전하
+   - GIDL/GIJL과 마찬가지로 깜빡임 없이 고정 표시
+   - leakage 자체는 빨간 화살표 경로로 표현
+   ========================================================= */
+
+.pge-stored-charge {
+    fill: #38bdf8;
+    filter: url(#pge-glow);
+    transition: opacity 0.3s ease;
+}
+
+
+/* =========================================================
+   4. Victim Wordline / Passing Wordline
+   ========================================================= */
+
+/* OFF 상태인 victim wordline */
+.pge-victim-gate {
+    fill: #b9d8e8;
+    stroke: #111827;
+    stroke-width: 2.2;
+    transition: fill 0.25s ease, filter 0.25s ease;
+}
+
+/* ACTIVE 상태인 passing wordline */
+.pge-passing-gate {
+    fill: rgba(168, 85, 247, 0.38);
+    stroke: #111827;
+    stroke-width: 2.2;
+    transition: fill 0.25s ease, filter 0.25s ease;
+}
+
+/* 애니메이션 실행 시 passing WL 강조 */
+body.pge-active .pge-passing-gate {
+    fill: rgba(168, 85, 247, 0.62);
+    filter: url(#pge-glow);
+}
+
+/* victim WL은 직접 켜지는 게 아니라 영향을 받는 느낌만 약하게 표시 */
+body.pge-active .pge-victim-gate {
+    fill: #c7e7f5;
+}
+
+
+/* =========================================================
+   5. Adjacent Cell 영역
+   ========================================================= */
+
+.pge-adjacent-region {
+    fill: #135b78;
+    stroke: #111827;
+    stroke-width: 2.2;
+    transition: filter 0.25s ease;
+}
+
+body.pge-active .pge-adjacent-region {
+    filter: url(#pge-glow);
+}
+
+
+/* =========================================================
+   6. Victim Channel / Barrier
+   ========================================================= */
+
+/* Victim cell의 channel 위치 */
+.pge-channel-line {
+    fill: none;
+    stroke: rgba(17, 24, 39, 0.7);
+    stroke-width: 2.8;
+    stroke-dasharray: 7 7;
+    stroke-linecap: round;
+}
+
+/* 정상 OFF 상태에서 높은 barrier */
+.pge-normal-barrier {
+    fill: rgba(100, 116, 139, 0.28);
+    stroke: rgba(17, 24, 39, 0.55);
+    stroke-width: 1.8;
+    stroke-dasharray: 7 6;
+    transition: opacity 0.25s ease;
+}
+
+/* Passing WL 영향으로 낮아진 barrier */
+.pge-lowered-barrier {
+    fill: rgba(239, 68, 68, 0.06);
+    stroke: rgba(239, 68, 68, 0);
+    stroke-width: 2.5;
+    opacity: 0;
+    transition: opacity 0.25s ease, stroke 0.25s ease, fill 0.25s ease;
+}
+
+/* 실행 시 정상 barrier는 약해지고 lowered barrier가 보임 */
+body.pge-active .pge-normal-barrier {
+    opacity: 0.25;
+}
+
+body.pge-active .pge-lowered-barrier {
+    opacity: 1;
+    fill: rgba(239, 68, 68, 0.16);
+    stroke: rgba(239, 68, 68, 0.9);
+    filter: url(#pge-glow);
+}
+
+
+/* =========================================================
+   7. Passing WL 전계 간섭 영역
+   ========================================================= */
+
+.pge-coupling-zone {
+    fill: rgba(56, 189, 248, 0.04);
+    stroke: rgba(56, 189, 248, 0);
+    stroke-width: 2;
+    transition: fill 0.25s ease, stroke 0.25s ease, opacity 0.25s ease;
+}
+
+body.pge-active .pge-coupling-zone {
+    fill: rgba(56, 189, 248, 0.14);
+    stroke: rgba(56, 189, 248, 0.55);
+    filter: url(#pge-glow);
+}
+
+
+/* =========================================================
+   8. Passing WL electric field arrows
+   ========================================================= */
+
+.pge-field-arrow {
+    opacity: 0;
+    stroke: #38bdf8;
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: opacity 0.25s ease;
+}
+
+body.pge-active .pge-field-arrow {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   9. PGE hotspot
+   - barrier lowering이 일어나는 victim cell drain/channel 쪽 강조
+   ========================================================= */
+
+.pge-hotspot {
+    fill: rgba(239, 68, 68, 0.04);
+    stroke: rgba(239, 68, 68, 0);
+    stroke-width: 2.5;
+    transition: fill 0.25s ease, stroke 0.25s ease, opacity 0.25s ease;
+}
+
+.pge-hotspot-label {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+body.pge-active .pge-hotspot {
+    fill: rgba(239, 68, 68, 0.18);
+    stroke: rgba(239, 68, 68, 0.9);
+    filter: url(#pge-glow);
+    animation: pgeHotspotPulse 1.2s ease-in-out infinite;
+}
+
+body.pge-active .pge-hotspot-label {
+    opacity: 1;
+}
+
+@keyframes pgeHotspotPulse {
+
+    0%,
+    100% {
+        stroke-width: 2.5;
+        opacity: 0.8;
+    }
+
+    50% {
+        stroke-width: 6;
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   10. PGE leakage path
+   - 빨간 전자 dot 이동이 아니라
+   - Storage Node -> lowered barrier -> leakage 방향 화살표로 표현
+   ========================================================= */
+
+.pge-leakage-path {
+    fill: none;
+    stroke: rgba(239, 68, 68, 0);
+    stroke-width: 5;
+    stroke-dasharray: 16 10;
+    stroke-linecap: round;
+    transition: stroke 0.25s ease;
+}
+
+body.pge-active .pge-leakage-path {
+    stroke: rgba(239, 68, 68, 0.95);
+    animation: pgeLeakageArrowFlow 1.6s linear infinite;
+}
+
+@keyframes pgeLeakageArrowFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -52;
+    }
+}
+
+.pge-leakage-label {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+body.pge-active .pge-leakage-label {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   11. Energy barrier inset
+   - 오른쪽 아래 작은 barrier 설명 그림
+   ========================================================= */
+
+#pge-band-box .band-panel {
+    fill: rgba(255, 255, 255, 0.45);
+    stroke: rgba(17, 24, 39, 0.18);
+    stroke-width: 1.5;
+}
+
+.pge-high-barrier-line {
+    fill: none;
+    stroke: #64748b;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-dasharray: 7 6;
+}
+
+.pge-low-barrier-line {
+    fill: none;
+    stroke: rgba(239, 68, 68, 0.25);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    transition: stroke 0.25s ease, filter 0.25s ease;
+}
+
+body.pge-active .pge-low-barrier-line {
+    stroke: rgba(239, 68, 68, 0.95);
+    filter: url(#pge-glow);
+}
+
+
+/* =========================================================
+   12. PGE 상태 badge
+   ========================================================= */
+
+body.pge-active #pge-state-badge {
+    background: rgba(239, 68, 68, 0.16);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: #fecaca;
+}
+
+
+/* =========================================================
+   13. PGE 설명 label 미세 조정
+   ========================================================= */
+
+#pge-svg .depletion-label.strong {
+    fill: #1f2937;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+#pge-svg .mini-label,
+#pge-svg .side-label,
+#pge-svg .svg-small {
+    fill: #1f2937;
+}
+
+
+/* =========================================================
+   14. PGE 반응형
+   ========================================================= */
+
+@media (max-width: 1100px) {
+    .pge-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   1-RD Section 전용 스타일
+   - 1-Row Disturb / RowHammer concept
+   - 핵심:
+     1. Aggressor row 반복 activate/precharge
+     2. 인접 victim row disturbance
+     3. Victim cell charge loss / retention margin 감소
+     4. Refresh 전 bit flip 가능성 증가
+   ========================================================= */
+
+
+/* =========================================================
+   1. 1-RD section 배경
+   ========================================================= */
+
+.one-rd-section {
+    background:
+        radial-gradient(circle at 18% 12%, rgba(56, 189, 248, 0.10), transparent 28%),
+        radial-gradient(circle at 82% 28%, rgba(239, 68, 68, 0.10), transparent 30%),
+        radial-gradient(circle at 58% 78%, rgba(250, 204, 21, 0.08), transparent 32%),
+        #020617;
+}
+
+.one-rd-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, 0.65fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   2. 1-RD SVG 영역
+   ========================================================= */
+
+#one-rd-svg {
+    width: 100%;
+    min-height: 560px;
+    border-radius: 22px;
+    background: transparent;
+}
+
+#one-rd-svg .figure-bg {
+    fill: #e5e7eb;
+    stroke: #cbd5e1;
+    stroke-width: 1.5;
+}
+
+
+/* =========================================================
+   3. DRAM Cell Array 배경
+   ========================================================= */
+
+.one-rd-array-bg {
+    fill: rgba(248, 250, 252, 0.65);
+    stroke: rgba(17, 24, 39, 0.22);
+    stroke-width: 2;
+}
+
+
+/* =========================================================
+   4. Aggressor Row
+   - 반복적으로 activate/precharge되는 row
+   ========================================================= */
+
+.one-rd-aggressor-row {
+    fill: rgba(239, 68, 68, 0.72);
+    stroke: #111827;
+    stroke-width: 2.2;
+    transition: fill 0.25s ease, filter 0.25s ease;
+}
+
+body.one-rd-active .one-rd-aggressor-row {
+    fill: rgba(239, 68, 68, 0.92);
+    filter: url(#one-rd-glow);
+    animation: oneRdAggressorPulse 0.9s ease-in-out infinite;
+}
+
+@keyframes oneRdAggressorPulse {
+
+    0%,
+    100% {
+        opacity: 0.78;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   5. Hammer pulse line
+   - Aggressor row가 반복적으로 열리고 닫히는 느낌
+   ========================================================= */
+
+.one-rd-pulse-line {
+    fill: none;
+    stroke: rgba(239, 68, 68, 0.35);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.25s ease, filter 0.25s ease;
+}
+
+body.one-rd-active .one-rd-pulse-line {
+    stroke: rgba(239, 68, 68, 0.95);
+    filter: url(#one-rd-glow);
+    animation: oneRdPulseFlow 1.1s linear infinite;
+}
+
+@keyframes oneRdPulseFlow {
+    0% {
+        stroke-dasharray: 12 12;
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dasharray: 12 12;
+        stroke-dashoffset: -48;
+    }
+}
+
+
+/* =========================================================
+   6. Victim Row
+   - 직접 access되지 않았지만 disturbance를 받는 row
+   ========================================================= */
+
+.one-rd-victim-row {
+    fill: rgba(186, 230, 253, 0.62);
+    stroke: #111827;
+    stroke-width: 2.2;
+    transition: fill 0.25s ease, filter 0.25s ease;
+}
+
+body.one-rd-active .one-rd-victim-row {
+    fill: rgba(186, 230, 253, 0.78);
+}
+
+
+/* =========================================================
+   7. Disturbance Zone
+   - victim row 내부에서 영향을 받는 영역
+   ========================================================= */
+
+.one-rd-disturb-zone {
+    fill: rgba(250, 204, 21, 0.08);
+    stroke: rgba(250, 204, 21, 0);
+    stroke-width: 2.5;
+    transition: fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+}
+
+body.one-rd-active .one-rd-disturb-zone {
+    fill: rgba(250, 204, 21, 0.24);
+    stroke: rgba(250, 204, 21, 0.85);
+    filter: url(#one-rd-glow);
+    animation: oneRdDisturbPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes oneRdDisturbPulse {
+
+    0%,
+    100% {
+        stroke-width: 2.5;
+        opacity: 0.8;
+    }
+
+    50% {
+        stroke-width: 6;
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   8. Passive Row
+   - 1-RD가 하나의 aggressor row 중심임을 보여주기 위한 약한 row
+   ========================================================= */
+
+.one-rd-passive-row {
+    fill: rgba(148, 163, 184, 0.22);
+    stroke: rgba(17, 24, 39, 0.35);
+    stroke-width: 1.8;
+}
+
+
+/* =========================================================
+   9. Victim Cell 저장 전하
+   - 전하 자체는 깜빡이지 않고 고정 표시
+   - disturbance는 화살표와 zone으로 표현
+   ========================================================= */
+
+.one-rd-stored-charge {
+    fill: #38bdf8;
+    filter: url(#one-rd-glow);
+    transition: opacity 0.25s ease;
+}
+
+
+/* =========================================================
+   10. Coupling Arrow
+   - aggressor row가 victim row에 주는 간섭 방향
+   ========================================================= */
+
+.one-rd-coupling-arrow {
+    opacity: 0;
+    stroke: #38bdf8;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    transition: opacity 0.25s ease;
+}
+
+.one-rd-coupling-label {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+body.one-rd-active .one-rd-coupling-arrow,
+body.one-rd-active .one-rd-coupling-label {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   11. Charge loss / disturbance direction
+   - 빨간 전자 dot 이동이 아니라
+   - victim cell charge margin이 줄어드는 방향을 화살표 흐름으로 표현
+   ========================================================= */
+
+.one-rd-leakage-path {
+    fill: none;
+    stroke: rgba(239, 68, 68, 0);
+    stroke-width: 5;
+    stroke-dasharray: 16 10;
+    stroke-linecap: round;
+    transition: stroke 0.25s ease;
+}
+
+body.one-rd-active .one-rd-leakage-path {
+    stroke: rgba(239, 68, 68, 0.95);
+    animation: oneRdChargeLossFlow 1.6s linear infinite;
+}
+
+@keyframes oneRdChargeLossFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -52;
+    }
+}
+
+.one-rd-leakage-label {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+body.one-rd-active .one-rd-leakage-label {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   12. 오른쪽 SVG 내부 정보 박스
+   ========================================================= */
+
+#one-rd-info-box .band-panel {
+    fill: rgba(255, 255, 255, 0.52);
+    stroke: rgba(17, 24, 39, 0.18);
+    stroke-width: 1.5;
+}
+
+.one-rd-divider-line {
+    stroke: rgba(17, 24, 39, 0.25);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+}
+
+
+/* =========================================================
+   13. 1-RD 상태 badge
+   ========================================================= */
+
+body.one-rd-active #one-rd-state-badge {
+    background: rgba(239, 68, 68, 0.16);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: #fecaca;
+}
+
+
+/* =========================================================
+   14. 1-RD label 미세 조정
+   ========================================================= */
+
+#one-rd-svg .figure-label-white {
+    fill: #ffffff;
+}
+
+#one-rd-svg .figure-label-dark {
+    fill: #111827;
+}
+
+#one-rd-svg .mini-label,
+#one-rd-svg .side-label,
+#one-rd-svg .svg-small {
+    fill: #1f2937;
+}
+
+#one-rd-svg .depletion-label.strong {
+    fill: #1f2937;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   15. 1-RD 반응형
+   ========================================================= */
+
+@media (max-width: 1100px) {
+    .one-rd-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   tRDL Section 전용 스타일
+   - Write & Fail Timing Issue
+   - 핵심:
+     1. WRITE 이후 cell voltage가 안정화되는 데 시간이 필요함
+     2. tRDL margin이 부족하면 다음 동작이 너무 빨리 들어옴
+     3. cell voltage가 sensing margin 근처에 머물러 write fail 가능성 증가
+   ========================================================= */
+
+
+/* =========================================================
+   1. tRDL section 배경
+   ========================================================= */
+
+.trdl-section {
+    background:
+        radial-gradient(circle at 18% 12%, rgba(56, 189, 248, 0.10), transparent 28%),
+        radial-gradient(circle at 82% 25%, rgba(239, 68, 68, 0.12), transparent 30%),
+        radial-gradient(circle at 55% 78%, rgba(250, 204, 21, 0.08), transparent 32%),
+        #020617;
+}
+
+.trdl-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, 0.65fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   2. tRDL SVG 영역
+   ========================================================= */
+
+#trdl-svg {
+    width: 100%;
+    min-height: 560px;
+    border-radius: 22px;
+    background: transparent;
+}
+
+#trdl-svg .figure-bg {
+    fill: #e5e7eb;
+    stroke: #cbd5e1;
+    stroke-width: 1.5;
+}
+
+
+/* =========================================================
+   3. Panel 기본 스타일
+   ========================================================= */
+
+.trdl-cell-panel,
+.trdl-timing-panel,
+.trdl-wave-panel {
+    fill: rgba(248, 250, 252, 0.72);
+    stroke: rgba(17, 24, 39, 0.18);
+    stroke-width: 2;
+}
+
+body.trdl-active .trdl-cell-panel,
+body.trdl-active .trdl-timing-panel,
+body.trdl-active .trdl-wave-panel {
+    stroke: rgba(56, 189, 248, 0.55);
+}
+
+
+/* =========================================================
+   4. Write path / cell diagram
+   ========================================================= */
+
+.trdl-write-driver {
+    fill: rgba(37, 99, 235, 0.82);
+    stroke: #111827;
+    stroke-width: 2;
+    transition: fill 0.25s ease, filter 0.25s ease;
+}
+
+body.trdl-active .trdl-write-driver {
+    fill: rgba(37, 99, 235, 0.96);
+    filter: url(#trdl-glow);
+}
+
+.trdl-access-gate {
+    fill: #b9d8e8;
+    stroke: #111827;
+    stroke-width: 2;
+    transition: fill 0.25s ease, filter 0.25s ease;
+}
+
+body.trdl-active .trdl-access-gate {
+    fill: #c7e7f5;
+    filter: url(#trdl-glow);
+}
+
+.trdl-connection-line {
+    stroke: #111827;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.trdl-cell-charge {
+    fill: #38bdf8;
+    filter: url(#trdl-glow);
+}
+
+
+/* 정상 write flow */
+.trdl-write-flow {
+    fill: none;
+    stroke: rgba(56, 189, 248, 0);
+    stroke-width: 5;
+    stroke-dasharray: 16 10;
+    stroke-linecap: round;
+    transition: stroke 0.25s ease;
+}
+
+body.trdl-active .trdl-write-flow {
+    stroke: rgba(56, 189, 248, 0.95);
+    animation: trdlWriteFlow 1.5s linear infinite;
+}
+
+@keyframes trdlWriteFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -52;
+    }
+}
+
+
+/* cell voltage 미완성 fail arrow */
+.trdl-fail-arrow {
+    fill: none;
+    stroke: rgba(239, 68, 68, 0);
+    stroke-width: 5;
+    stroke-dasharray: 14 9;
+    stroke-linecap: round;
+    transition: stroke 0.25s ease;
+}
+
+body.trdl-active .trdl-fail-arrow {
+    stroke: rgba(239, 68, 68, 0.95);
+    animation: trdlFailArrowFlow 1.4s linear infinite;
+}
+
+@keyframes trdlFailArrowFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -46;
+    }
+}
+
+.trdl-cell-fail-label {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+body.trdl-active .trdl-cell-fail-label {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   5. Command / Timing Sequence
+   ========================================================= */
+
+.trdl-command-box {
+    stroke: #111827;
+    stroke-width: 2;
+    transition: filter 0.25s ease, opacity 0.25s ease;
+}
+
+.trdl-command-active {
+    fill: rgba(15, 118, 110, 0.85);
+}
+
+.trdl-command-write {
+    fill: rgba(37, 99, 235, 0.86);
+}
+
+.trdl-command-next {
+    fill: rgba(239, 68, 68, 0.76);
+}
+
+body.trdl-active .trdl-command-write,
+body.trdl-active .trdl-command-next {
+    filter: url(#trdl-glow);
+}
+
+.trdl-command-arrow {
+    stroke: #38bdf8;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+}
+
+.trdl-risk-command-arrow {
+    stroke: rgba(239, 68, 68, 0.25);
+    transition: stroke 0.25s ease;
+}
+
+body.trdl-active .trdl-risk-command-arrow {
+    stroke: rgba(239, 68, 68, 0.95);
+    animation: trdlRiskArrowPulse 1s ease-in-out infinite;
+}
+
+@keyframes trdlRiskArrowPulse {
+    0%,
+    100% {
+        opacity: 0.65;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* Required write margin window */
+.trdl-window-line {
+    stroke: #111827;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.trdl-window-tick {
+    stroke: #111827;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+/* Too short violation zone */
+.trdl-violation-zone {
+    fill: rgba(239, 68, 68, 0.04);
+    stroke: rgba(239, 68, 68, 0);
+    stroke-width: 2.5;
+    transition: fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+}
+
+body.trdl-active .trdl-violation-zone {
+    fill: url(#trdl-warning-pattern);
+    stroke: rgba(239, 68, 68, 0.95);
+    filter: url(#trdl-glow);
+    animation: trdlViolationPulse 1.1s ease-in-out infinite;
+}
+
+@keyframes trdlViolationPulse {
+    0%,
+    100% {
+        opacity: 0.6;
+        stroke-width: 2.5;
+    }
+
+    50% {
+        opacity: 1;
+        stroke-width: 5;
+    }
+}
+
+.trdl-violation-label {
+    opacity: 0;
+    fill: #b91c1c;
+    font-weight: 800;
+    transition: opacity 0.25s ease;
+}
+
+body.trdl-active .trdl-violation-label {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   6. Waveform View
+   ========================================================= */
+
+.trdl-axis-line {
+    stroke: #111827;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+}
+
+.trdl-wl-wave {
+    fill: none;
+    stroke: #111827;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.trdl-bl-wave {
+    fill: none;
+    stroke: #2563eb;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* 정상 cell voltage curve */
+.trdl-cell-good-wave {
+    fill: none;
+    stroke: rgba(56, 189, 248, 0.95);
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: filter 0.25s ease;
+}
+
+body.trdl-active .trdl-cell-good-wave {
+    filter: url(#trdl-glow);
+}
+
+
+/* tRDL 부족 cell voltage curve */
+.trdl-cell-bad-wave {
+    fill: none;
+    stroke: rgba(239, 68, 68, 0.35);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 10 8;
+    transition: stroke 0.25s ease, filter 0.25s ease;
+}
+
+body.trdl-active .trdl-cell-bad-wave {
+    stroke: rgba(239, 68, 68, 0.95);
+    filter: url(#trdl-glow);
+    animation: trdlBadWaveFlow 1.4s linear infinite;
+}
+
+@keyframes trdlBadWaveFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -36;
+    }
+}
+
+
+/* sensing threshold */
+.trdl-threshold-line {
+    stroke: rgba(17, 24, 39, 0.45);
+    stroke-width: 2;
+    stroke-dasharray: 8 7;
+}
+
+
+/* 정상 deadline */
+.trdl-good-deadline {
+    stroke: rgba(56, 189, 248, 0.8);
+    stroke-width: 3;
+    stroke-dasharray: 8 6;
+}
+
+
+/* short timing deadline */
+.trdl-short-deadline {
+    stroke: rgba(239, 68, 68, 0.35);
+    stroke-width: 3;
+    stroke-dasharray: 8 6;
+    transition: stroke 0.25s ease, filter 0.25s ease;
+}
+
+body.trdl-active .trdl-short-deadline {
+    stroke: rgba(239, 68, 68, 0.95);
+    filter: url(#trdl-glow);
+}
+
+.trdl-short-label {
+    fill: #b91c1c;
+    font-weight: 800;
+}
+
+
+/* fail zone in waveform */
+.trdl-wave-fail-zone {
+    fill: rgba(239, 68, 68, 0.04);
+    stroke: rgba(239, 68, 68, 0);
+    stroke-width: 2.5;
+    transition: fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+}
+
+body.trdl-active .trdl-wave-fail-zone {
+    fill: rgba(239, 68, 68, 0.16);
+    stroke: rgba(239, 68, 68, 0.9);
+    filter: url(#trdl-glow);
+    animation: trdlWaveFailPulse 1.1s ease-in-out infinite;
+}
+
+@keyframes trdlWaveFailPulse {
+    0%,
+    100% {
+        opacity: 0.65;
+        stroke-width: 2.5;
+    }
+
+    50% {
+        opacity: 1;
+        stroke-width: 5;
+    }
+}
+
+.trdl-wave-fail-text {
+    opacity: 0;
+    fill: #b91c1c;
+    font-weight: 800;
+    transition: opacity 0.25s ease;
+}
+
+body.trdl-active .trdl-wave-fail-text {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   7. tRDL 상태 badge
+   ========================================================= */
+
+body.trdl-active #trdl-state-badge {
+    background: rgba(239, 68, 68, 0.16);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: #fecaca;
+}
+
+
+/* =========================================================
+   8. tRDL label 미세 조정
+   ========================================================= */
+
+#trdl-svg .figure-label-white {
+    fill: #ffffff;
+}
+
+#trdl-svg .figure-label-dark {
+    fill: #111827;
+}
+
+#trdl-svg .mini-label,
+#trdl-svg .side-label,
+#trdl-svg .svg-small {
+    fill: #1f2937;
+}
+
+#trdl-svg .svg-small {
+    font-size: 14px;
+}
+
+#trdl-svg .small-figure-text {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   9. tRDL 반응형
+   ========================================================= */
+
+@media (max-width: 1100px) {
+    .trdl-layout {
+        grid-template-columns: 1fr;
+    }
 }
