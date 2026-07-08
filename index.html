@@ -191,10 +191,10 @@
 
                         <!-- Capacitor 내부 저장 전하 -->
                         <g id="stored-charge">
-                            <circle class="stored-charge c1" cx="725" cy="80" r="6"></circle>
-                            <circle class="stored-charge c2" cx="748" cy="80" r="6"></circle>
-                            <circle class="stored-charge c3" cx="771" cy="80" r="6"></circle>
-                            <circle class="stored-charge c4" cx="794" cy="80" r="6"></circle>
+                            <circle class="stored-charge c1" cx="725" cy="112" r="6"></circle>
+                            <circle class="stored-charge c2" cx="748" cy="112" r="6"></circle>
+                            <circle class="stored-charge c3" cx="771" cy="112" r="6"></circle>
+                            <circle class="stored-charge c4" cx="794" cy="112" r="6"></circle>
                         </g>
 
                         <!-- =================================================
@@ -289,36 +289,22 @@
                              10. Leakage Path
                              - capacitor/storage node → drain → gate-drain overlap 방향
                              ================================================= -->
-                        <path id="leakage-path" d="M760 80
-                               C760 125, 760 180, 760 242
-                               C725 244, 690 242, 662 238" class="leakage-path" marker-end="url(#red-arrow)">
+                        <path id="leakage-path" d="M760 138
+                               C760 175, 735 205, 700 225
+                               C685 233, 672 237, 662 238" class="leakage-path" marker-end="url(#red-arrow)">
                         </path>
 
-                        <circle class="leakage-electron e1" cx="760" cy="80" r="5"></circle>
-                        <circle class="leakage-electron e2" cx="760" cy="80" r="5"></circle>
-                        <circle class="leakage-electron e3" cx="760" cy="80" r="5"></circle>
+                        <!-- Gate drain overlap 부근에서 body 아래쪽으로 -->
+                        <path id=""leakage-path-2" d="M662 238
+                            C646 285, 635 350, 625 420
+                            C622 445, 620 468, 618 490"
+                            class="leakage-path"
+                            marker-end="url(#red-arrow)">
+                        </path>
 
-                        <!-- =================================================
-                             11. BTBT 보조 그림
-                             ================================================= -->
-                        <g id="band-box">
-                            <rect x="880" y="382" width="185" height="145" rx="18" class="band-panel"></rect>
+                        <text x="585" y="510"
+                        class="svg-small">Body 방향 leakage</text>
 
-                            <text x="904" y="412" class="figure-label-dark small-figure-text">BTBT 개념</text>
-
-                            <path d="M910 455 C940 428, 970 428, 1030 405" class="band-line conduction"></path>
-                            <text x="906" y="438" class="mini-label">전도대</text>
-
-                            <path d="M910 494 C945 522, 985 514, 1035 490" class="band-line valence"></path>
-                            <text x="906" y="522" class="mini-label">가전자대</text>
-
-                            <path id="btbt-arrow" d="M940 489 C955 468, 980 440, 1006 414" class="btbt-arrow"
-                                marker-end="url(#red-arrow)">
-                            </path>
-
-                            <circle class="btbt-electron" cx="940" cy="489" r="5"></circle>
-                            <text x="978" y="510" class="mini-label btbt-text">전자 터널링</text>
-                        </g>
 
                     </svg>
 
@@ -515,10 +501,10 @@
 
                         <!-- 저장 전하 -->
                         <g id="gijl-stored-charge">
-                            <circle class="gijl-stored-charge c1" cx="725" cy="84" r="6"></circle>
-                            <circle class="gijl-stored-charge c2" cx="748" cy="84" r="6"></circle>
-                            <circle class="gijl-stored-charge c3" cx="771" cy="84" r="6"></circle>
-                            <circle class="gijl-stored-charge c4" cx="794" cy="84" r="6"></circle>
+                            <circle class="gijl-stored-charge c1" cx="720" cy="112" r="6"></circle>
+                            <circle class="gijl-stored-charge c2" cx="742" cy="112" r="6"></circle>
+                            <circle class="gijl-stored-charge c3" cx="782" cy="112" r="6"></circle>
+                            <circle class="gijl-stored-charge c4" cx="804" cy="112" r="6"></circle>
                         </g>
 
 
@@ -641,11 +627,6 @@
                        C748 285, 730 325, 705 360
                        C680 395, 650 430, 615 460" class="gijl-leakage-path" marker-end="url(#gijl-red-arrow)">
                         </path>
-
-                        <!-- 누설 전자 -->
-                        <circle class="gijl-leakage-electron ge1" cx="760" cy="84" r="5"></circle>
-                        <circle class="gijl-leakage-electron ge2" cx="760" cy="84" r="5"></circle>
-                        <circle class="gijl-leakage-electron ge3" cx="760" cy="84" r="5"></circle>
 
 
                         <!-- =================================================
