@@ -368,11 +368,6 @@ body.gidl-active .state-badge {
     stroke-width: 2.2;
 }
 
-.depletion-zone {
-    fill: url(#depletionPattern);
-    stroke: #111827;
-    stroke-width: 1.8;
-}
 
 
 /* =========================================================
@@ -385,17 +380,6 @@ body.gidl-active .state-badge {
     transition: opacity 0.3s ease;
 }
 
-@keyframes storedChargeBlink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.35;
-    }
-}
 
 
 /* =========================================================
@@ -492,48 +476,6 @@ body.gidl-active .leakage-path {
     stroke: rgba(239, 68, 68, 0.95);
 }
 
-.leakage-electron {
-    fill: #ef4444;
-    opacity: 0;
-    filter: url(#glow);
-}
-
-body.gidl-active .leakage-electron {
-    opacity: 1;
-}
-
-body.gidl-active .e1 {
-    animation: electronLeakage 1.8s linear infinite;
-}
-
-body.gidl-active .e2 {
-    animation: electronLeakage 1.8s linear infinite 0.45s;
-}
-
-body.gidl-active .e3 {
-    animation: electronLeakage 1.8s linear infinite 0.9s;
-}
-
-@keyframes electronLeakage {
-    0% {
-        transform: translate(0, 0);
-        opacity: 0;
-    }
-
-    12% {
-        opacity: 1;
-    }
-
-    50% {
-        transform: translate(-120px, -18px);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translate(-305px, -33px);
-        opacity: 0;
-    }
-}
 
 
 /* =========================================================
@@ -862,20 +804,92 @@ body.gidl-active .btbt-text {
     stroke-width: 2;
 }
 
-/* 공핍영역 */
-.depletion-zone {
-    fill: url(#depletionPattern);
-    stroke: #111827;
-    stroke-width: 1.7;
-    opacity: 0.95;
+/* =========================================================
+   Clean red-hatched depletion region
+   - GIDL / GIJL 공통 최종 공핍영역 스타일
+   - source/drain 내부를 덮지 않고
+     gate oxide 아래와 diffusion 바로 아래쪽에만 표시
+   ========================================================= */
+
+/* GIDL 공핍영역 */
+.clean-depletion-region {
+    fill: url(#gidl-red-depletion-hatch);
+    stroke: #ef4444;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.82;
+    pointer-events: none;
 }
 
-.source-depletion {
-    opacity: 0.5;
+/* GIJL 공핍영역 */
+.clean-gijl-depletion-region {
+    fill: url(#gijl-red-depletion-hatch);
+    stroke: #ef4444;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.82;
+    pointer-events: none;
 }
 
-.drain-depletion {
+/* Source 쪽은 보조 공핍영역이므로 약하게 */
+.weak-depletion {
+    opacity: 0.48;
+    stroke-width: 3;
+}
+
+/* Drain 쪽은 핵심 공핍영역이므로 강하게 */
+.strong-depletion {
     opacity: 0.95;
+    stroke-width: 4.5;
+}
+
+/* Gate oxide 바로 아래 channel-side depletion */
+.gidl-channel-depletion,
+.gijl-channel-depletion {
+    opacity: 0.78;
+}
+
+/* GIDL 실행 시 drain-side와 gate-oxide-side 강조 */
+body.gidl-active .gidl-drain-clean-depletion,
+body.gidl-active .gidl-channel-depletion {
+    opacity: 1;
+    stroke-width: 5;
+    filter: url(#glow);
+    animation: cleanDepletionPulse 1.25s ease-in-out infinite;
+}
+
+/* GIDL source-side는 약하게 유지 */
+body.gidl-active .gidl-source-clean-depletion {
+    opacity: 0.55;
+}
+
+/* GIJL 실행 시 drain junction과 gate-oxide-side 강조 */
+body.gijl-active .gijl-drain-clean-depletion,
+body.gijl-active .gijl-channel-depletion {
+    opacity: 1;
+    stroke-width: 5;
+    filter: url(#gijl-glow);
+    animation: cleanDepletionPulse 1.25s ease-in-out infinite;
+}
+
+/* GIJL source-side는 약하게 유지 */
+body.gijl-active .gijl-source-clean-depletion {
+    opacity: 0.55;
+}
+
+@keyframes cleanDepletionPulse {
+    0%,
+    100% {
+        stroke-width: 4;
+        opacity: 0.82;
+    }
+
+    50% {
+        stroke-width: 6;
+        opacity: 1;
+    }
 }
 
 /* channel */
@@ -1003,11 +1017,11 @@ body.gidl-active .field-arrow {
 
 body.gidl-active .leakage-path {
     stroke: rgba(239, 68, 68, 0.95);
-    animation: gidLeakageArrowFlow 1.6s linear infinite;
+    animation: gidlLeakageArrowFlow 1.6s linear infinite;
 }
 
 /* 화살표 선이 흐르는 느낌 */
-@keyframes gidLeakageArrowFlow {
+@keyframes gidlLeakageArrowFlow {
     from {
         stroke-dashoffset: 0;
     }
@@ -1138,23 +1152,6 @@ body.gidl-active .btbt-text {
     transition: opacity 0.3s ease;
 }
 
-/* =========================================================
-   4. GIJL Drain Junction 공핍영역
-   - GIJL에서는 이 부분이 핵심
-   ========================================================= */
-
-.gijl-junction-depletion {
-    fill: url(#gijl-depletion-pattern);
-    stroke: #111827;
-    stroke-width: 1.8;
-    opacity: 0.88;
-    transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-body.gijl-active .gijl-junction-depletion {
-    opacity: 1;
-    filter: url(#gijl-glow);
-}
 
 
 /* =========================================================
@@ -1231,78 +1228,31 @@ body.gijl-active .gijl-field-arrow {
 
 /* =========================================================
    7. GIJL Leakage Path
-   - Storage node / drain diffusion에서
-     drain junction depletion region을 지나 substrate 방향으로 빠지는 흐름
+   - 빨간 electron dot 이동 없이
+   - 빨간 dashed arrow flow로 leakage 방향만 표현
    ========================================================= */
 
 .gijl-leakage-path {
     fill: none;
     stroke: rgba(239, 68, 68, 0);
-    stroke-width: 4;
-    stroke-dasharray: 10 8;
+    stroke-width: 5;
+    stroke-dasharray: 16 10;
+    stroke-linecap: round;
     transition: stroke 0.25s ease;
 }
 
 body.gijl-active .gijl-leakage-path {
     stroke: rgba(239, 68, 68, 0.95);
+    animation: gijlLeakageArrowFlow 1.6s linear infinite;
 }
 
-.gijl-leakage-electron {
-    fill: #ef4444;
-    opacity: 0;
-    filter: url(#gijl-glow);
-}
-
-body.gijl-active .gijl-leakage-electron {
-    opacity: 1;
-}
-
-
-/* =========================================================
-   8. GIJL 전자 이동 애니메이션
-   시작점: Cell capacitor / Storage node
-   중간: Drain diffusion
-   끝점: Drain junction depletion region → substrate 방향
-   ========================================================= */
-
-body.gijl-active .ge1 {
-    animation: gijlElectronLeakage 2.1s linear infinite;
-}
-
-body.gijl-active .ge2 {
-    animation: gijlElectronLeakage 2.1s linear infinite 0.5s;
-}
-
-body.gijl-active .ge3 {
-    animation: gijlElectronLeakage 2.1s linear infinite 1s;
-}
-
-@keyframes gijlElectronLeakage {
-    0% {
-        transform: translate(0, 0);
-        opacity: 0;
+@keyframes gijlLeakageArrowFlow {
+    from {
+        stroke-dashoffset: 0;
     }
 
-    10% {
-        opacity: 1;
-    }
-
-    /* capacitor 위쪽에서 drain contact 방향으로 내려옴 */
-    35% {
-        transform: translate(0, 158px);
-        opacity: 1;
-    }
-
-    /* drain junction depletion region 쪽으로 이동 */
-    70% {
-        transform: translate(-45px, 276px);
-        opacity: 1;
-    }
-
-    /* substrate 방향으로 누설 */
-    100% {
-        transform: translate(-145px, 376px);
-        opacity: 0;
+    to {
+        stroke-dashoffset: -52;
     }
 }
 

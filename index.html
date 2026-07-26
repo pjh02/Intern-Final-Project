@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DRAM Fail Mechanism 시각화</title>
+    <title>DRAM Failure Mechanisms | Interactive Visualization</title>
+    <meta name="description" content="DRAM의 GIDL, GIJL, PGE, 1-Row Disturb, tRDL을 설명하는 생성형 AI 보조 인터랙티브 개념 시각화입니다.">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,20 +15,19 @@
          상단 메뉴
          ========================================================= -->
     <header class="top-nav">
-        <div class="logo">DRAM Fail Mechanism</div>
+        <div class="logo">DRAM Failure Mechanisms</div>
 
-        <nav>
-            <a href="#" class="nav-link active-nav" data-page="overview">개요</a>
-            <a href="#" class="nav-link" data-page="gidl">GIDL</a>
-            <a href="#" class="nav-link" data-page="gijl">GIJL</a>
-            <a href="#" class="nav-link" data-page="pge">PGE</a>
-            <a href="#" class="nav-link" data-page="one-rd">1-RD</a>
-            <a href="#" class="nav-link" data-page="trdl">tRDL</a>
-            <a href="#" class="nav-link" data-page="next">다음 항목</a>
+        <nav aria-label="주요 Failure Mechanism 탐색">
+            <a href="#overview" class="nav-link active-nav" data-page="overview" aria-current="page">개요</a>
+            <a href="#gidl" class="nav-link" data-page="gidl">GIDL</a>
+            <a href="#gijl" class="nav-link" data-page="gijl">GIJL</a>
+            <a href="#pge" class="nav-link" data-page="pge">PGE</a>
+            <a href="#one-rd" class="nav-link" data-page="one-rd">1-RD</a>
+            <a href="#trdl" class="nav-link" data-page="trdl">tRDL</a>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content">
 
         <!-- =========================================================
              개요
@@ -35,31 +35,31 @@
         <section id="overview" class="page active-page section hero-section">
 
             <div class="hero-text">
-                <p class="eyebrow">Interactive Visualization Demo</p>
+                <p class="eyebrow">Generative AI-Assisted Interactive Visualization</p>
 
                 <h1>
-                    DRAM Fail Mechanism<br>
-                    시각화 Demo
+                    DRAM Failure Mechanisms<br>
+                    Interactive Visualization
                 </h1>
 
                 <p class="hero-description">
-                    DRAM의 주요 fail mechanism을 직관적으로 설명하기 위한
-                    인터랙티브 웹페이지입니다.
-                    현재는 GIDL(Gate Induced Drain Leakage)을 먼저 구현했습니다.
+                    DRAM에서 발생할 수 있는 5가지 주요 불량 메커니즘을
+                    소자 구조, 전계 변화, 전하 이동, 전압 마진 변화의 관점에서
+                    직관적으로 이해할 수 있도록 만든 시각화 자료입니다.
                 </p>
             </div>
 
             <div class="mechanism-grid">
-                <div class="mechanism-card page-card active-card" data-page="gidl">
+                <div class="mechanism-card page-card" data-page="gidl">
                     <span>01</span>
                     <h3>GIDL</h3>
-                    <p>Gate Induced Drain Leakage</p>
+                    <p>Gate-Induced Drain Leakage</p>
                 </div>
 
                 <div class="mechanism-card page-card" data-page="gijl">
                     <span>02</span>
                     <h3>GIJL</h3>
-                    <p>Gate Induced Junction Leakage</p>
+                    <p>Gate-Induced Junction Leakage</p>
                 </div>
 
                 <div class="mechanism-card page-card" data-page="pge">
@@ -77,7 +77,7 @@
                 <div class="mechanism-card page-card" data-page="trdl">
                     <span>05</span>
                     <h3>tRDL</h3>
-                    <p>Write & Fail Timing Issue</p>
+                    <p>Last Data-In to Row-Precharge Delay</p>
                 </div>
             </div>
 
@@ -90,11 +90,12 @@
         <section id="gidl" class="page section gidl-section">
 
             <div class="section-title">
-                <p class="eyebrow">Static Fail Mechanism</p>
-                <h2 class="nowrap-title">GIDL: Gate Induced Drain Leakage</h2>
+                <p class="eyebrow">Static Leakage Failure Mechanism</p>
+                <h2 class="nowrap-title">GIDL: Gate-Induced Drain Leakage</h2>
                 <p>
-                    GIDL은 셀 트랜지스터가 OFF 상태일 때 gate-drain 인접 영역에서 강한 전계가 형성되고,
-                    이 전계로 인해 band-to-band tunneling이 유도되어 원치 않는 누설 전류가 발생하는 현상입니다.
+                    GIDL은 셀 트랜지스터가 OFF 상태일 때 gate–drain overlap 부근에 강한 전계가 형성되어
+                    주로 band-to-band tunneling으로 전자–정공 쌍이 생성되고 누설 전류가 흐르는 현상입니다.
+                    결함 준위가 존재하면 trap-assisted tunneling 성분이 함께 나타날 수 있습니다.
                 </p>
             </div>
 
@@ -107,8 +108,8 @@
 
                     <div class="panel-header">
                         <div>
-                            <h3>GIDL 누설 위치 및 전자 이동</h3>
-                            <p id="gidl-status-text">버튼을 누르면 GIDL 누설 경로가 표시됩니다.</p>
+                            <h3>GIDL 고전계 영역 및 Carrier Separation</h3>
+                            <p id="gidl-status-text" aria-live="polite">버튼을 누르면 GIDL 누설 경로가 표시됩니다.</p>
                         </div>
 
                         <div id="state-badge" class="state-badge">OFF 상태</div>
@@ -119,7 +120,8 @@
                          - 실제 상용 DRAM 단면을 그대로 재현한 것이 아니라
                            발표용 설명을 위한 단순화된 교육용 도식
                          ===================================================== -->
-                    <svg id="gidl-svg" viewBox="0 0 1100 620" aria-label="GIDL leakage animation">
+                    <svg id="gidl-svg" viewBox="0 0 1100 620" role="img" focusable="false"
+                        aria-label="GIDL high-field region and conceptual carrier separation">
 
                         <defs>
                             <!-- 파란 화살표: gate-drain 사이 전계 방향 표시 -->
@@ -142,9 +144,9 @@
                             </filter>
 
                             <!-- 공핍영역 패턴 -->
-                            <pattern id="depletionPattern" width="8" height="8" patternUnits="userSpaceOnUse"
-                                patternTransform="rotate(35)">
-                                <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="2"></line>
+                            <pattern id="gidl-red-depletion-hatch" width="10" height="10" patternUnits="userSpaceOnUse"
+                                patternTransform="rotate(25)">
+                                <line x1="0" y1="0" x2="0" y2="10" stroke="#ef4444" stroke-width="2"></line>
                             </pattern>
                         </defs>
 
@@ -169,16 +171,15 @@
                         <!-- =================================================
                              2. Bitline / Source Terminal
                              ================================================= -->
-                        <line x1="315" y1="80" x2="315" y2="218" class="terminal-line"></line>
+                        <line x1="315" y1="80" x2="315" y2="206" class="terminal-line"></line>
                         <circle cx="315" cy="74" r="5" class="terminal-dot"></circle>
                         <text x="275" y="60" class="side-label">Bitline</text>
-                        <line x1="315" y1="218" x2="315" y2="242" class="terminal-line"></line>
 
                         <!-- =================================================
                              3. Drain / Storage Node / Cell Capacitor
                              ================================================= -->
                         <!-- Storage node / Drain contact -->
-                        <line x1="760" y1="138" x2="760" y2="242" class="terminal-line"></line>
+                        <line x1="760" y1="138" x2="760" y2="206" class="terminal-line"></line>
                         <circle cx="760" cy="132" r="5" class="terminal-dot"></circle>
                         <text x="785" y="122" class="side-label">Storage Node</text>
 
@@ -203,17 +204,7 @@
                         <!-- =================================================
                              4. P-type Substrate
                              ================================================= -->
-                        <path class="substrate-body" d="M250 242
-                               L420 242
-                               L420 206
-                               L660 206
-                               L660 242
-                               L850 242
-                               L850 500
-                               L250 500
-                               Z">
-                        </path>
-
+                        <rect x="250" y="206" width="600" height="294" class="substrate-body"></rect>
                         <text x="290" y="474" class="substrate-label">P-type Substrate</text>
 
                         <!-- substrate ground -->
@@ -225,39 +216,37 @@
                         <!-- =================================================
                              5. Source / Drain n+ Diffusion
                              ================================================= -->
-                        <path class="sd-block source-block" d="M250 242
-                               L420 242
-                               L420 338
-                               Q420 365 390 365
-                               L250 365
-                               Z">
-                        </path>
-                        <text x="305" y="305" class="figure-label-white">Source</text>
-
-                        <path class="sd-block drain-block" d="M660 242
-                               L850 242
-                               L850 365
-                               L705 365
-                               Q660 365 660 322
-                               Z">
-                        </path>
-                        <text x="705" y="306" class="figure-label-white">Drain (n+)</text>
+                        <rect x="250" y="206" width="170" height="110" class="sd-block source-block"></rect>
+                        <text x="305" y="272" class="figure-label-white">Source</text>
+                        <rect x="660" y="206" width="190" height="110" class="sd-block drain-block"></rect>
+                        <text x="705" y="272" class="figure-label-white">Drain (n+)</text>
 
                         <!-- =================================================
-                             6. Drain 쪽 공핍영역
-                             - GIDL은 drain side gate edge가 핵심이므로 drain 쪽을 더 크게 강조
+                             6. Source / Drain 공핍영역
+                             - source 쪽은 약하게
+                             - source/drain 바로 아래+ gate edge 아래에 걸치도록 수정
                              ================================================= -->
-
-                        <path class="depletion-zone drain-depletion" d="M660 280
-                               Q710 232 775 255
-                               Q830 275 850 365
-                               L850 430
-                               L690 430
-                               Q646 395 646 345
-                               Q646 310 660 280
+                        <!-- Source depletion -->
+                        <!-- Source 아래 → Gate Oxide 아래 → Drain 아래가 연결된 unified depletion region -->
+                        <path class="clean-depletion-region gidl-unified-depletion gidl-channel-depletion gidl-drain-clean-depletion"
+                            d="M250 316
+                               L420 316
+                               L420 206
+                               L660 206
+                               L660 316
+                               L850 316
+                               L850 350
+                               L640 350
+                               L640 246
+                               L440 246
+                               L440 350
+                               L250 350
                                Z">
                         </path>
-                        <text x="675" y="392" class="depletion-label strong">Drain 측 공핍영역</text>
+
+                        <text x="282" y="382" class="depletion-label">Source 측 공핍영역</text>
+                        <text x="675" y="382" class="depletion-label strong">Drain 측 공핍영역</text>
+
 
                         <!-- =================================================
                              7. Gate 아래 Channel 영역
@@ -270,47 +259,48 @@
                              8. GIDL Hot Spot
                              - gate edge와 drain junction이 만나는 부근
                              ================================================= -->
-                        <ellipse id="hotspot" cx="662" cy="238" rx="46" ry="30" class="hotspot"></ellipse>
-                        <text x="646" y="244" class="hotspot-dot-text">●●●</text>
+                        <ellipse id="hotspot" cx="660" cy="222" rx="40" ry="25" class="hotspot"></ellipse>
+                        <text x="645" y="228" class="hotspot-dot-text">●●●</text>
 
-                        <text x="712" y="242" class="svg-small hotspot-label">GIDL 발생 영역</text>
-                        <text x="712" y="262" class="svg-small hotspot-label">Gate-Drain overlap</text>
+                        <text x="710" y="220" class="svg-small hotspot-label">GIDL 발생 영역</text>
+                        <text x="710" y="240" class="svg-small hotspot-label">Gate-Drain overlap</text>
 
-                        <path d="M692 240 C735 236, 772 228, 810 218" class="hotspot-pointer"></path>
+                        <path d="M685 222 C725 216, 765 210, 805 206" class="hotspot-pointer"></path>
 
                         <!-- =================================================
                              9. Electric Field Arrows
                              ================================================= -->
-                        <line x1="620" y1="208" x2="660" y2="238" class="field-arrow" marker-end="url(#blue-arrow)">
+                        <line x1="600" y1="206" x2="655" y2="220" class="field-arrow" marker-end="url(#blue-arrow)">
                         </line>
-                        <line x1="642" y1="208" x2="676" y2="244" class="field-arrow" marker-end="url(#blue-arrow)">
+                        <line x1="635" y1="206" x2="660" y2="230" class="field-arrow" marker-end="url(#blue-arrow)">
                         </line>
-                        <line x1="660" y1="216" x2="694" y2="258" class="field-arrow" marker-end="url(#blue-arrow)">
+                        <line x1="660" y1="212" x2="690" y2="236" class="field-arrow" marker-end="url(#blue-arrow)">
                         </line>
 
                         <!-- =================================================
                              10. Leakage Path
                              - capacitor/storage node → drain → gate-drain overlap 방향
                              ================================================= -->
-                        <path id="leakage-path" d="M760 138
-                               C760 175, 735 205, 700 225
-                               C685 233, 672 237, 662 238" class="leakage-path" marker-end="url(#red-arrow)">
+                        <path id="leakage-path" d="M660 222
+                               C685 210, 715 188, 738 160
+                               C748 150, 756 142, 760 138" class="leakage-path" marker-end="url(#red-arrow)">
                         </path>
 
-                        <!-- Gate drain overlap 부근에서 body 아래쪽으로 -->
-                        <path id="leakage-path-2" d="M662 238
-                            C646 285, 635 350, 625 420
+                        <!-- Gate-drain overlap 부근에서 body 아래쪽으로 -->
+                        <path id="leakage-path-2" d="M660 222
+                            C650 280, 636 360, 625 420
                             C622 445, 620 468, 618 490" class="leakage-path" marker-end="url(#red-arrow)">
                         </path>
 
-                        <text x="585" y="510" class="svg-small">Body 방향 leakage</text>
+                        <text x="585" y="510" class="svg-small">Hole component → body</text>
+                        <text x="748" y="160" class="svg-small">Electron component → drain</text>
 
 
                     </svg>
 
                     <div class="figure-caption">
-                        * 실제 상용 DRAM 단면 구조를 그대로 재현한 것이 아니라,
-                        GIDL이 발생하는 위치와 누설 방향을 설명하기 위한 교육용 단순화 도식입니다.
+                        * 고전계 영역에서 생성된 carrier의 개념적 분리 방향을 나타낸 단순화 도식입니다.
+                        화살표는 전자 흐름과 conventional current를 정량적으로 재현한 것이 아닙니다.
                     </div>
 
                 </div>
@@ -340,39 +330,44 @@
                     </div>
 
                     <div class="info-box">
-                        <h4>3. 누설 발생</h4>
+                        <h4>3. Carrier 생성과 분리</h4>
                         <p>
-                            이 강한 전계는 band-to-band tunneling을 유도하고,
-                            그 결과 OFF 상태에서도 leakage current가 발생하여
-                            저장 전하가 감소할 수 있습니다.
+                            고전계에서 band-to-band tunneling으로 생성된 전자와 정공은
+                            전계에 의해 drain과 body 방향으로 분리되며 OFF-state leakage를 형성합니다.
                         </p>
                     </div>
 
                     <div class="button-group">
-                        <button id="play-leakage-btn" class="primary-btn">
+                        <button id="play-leakage-btn" class="primary-btn" type="button">
                             GIDL 누설 애니메이션 실행
                         </button>
 
-                        <button id="reset-gidl-btn" class="secondary-btn">
+                        <button id="reset-gidl-btn" class="secondary-btn" type="button">
                             초기화
                         </button>
                     </div>
 
                     <div class="note-box">
-                        <h4>발표할 때 핵심 문장</h4>
+                        <h4>핵심 요약</h4>
                         <p>
-                            “GIDL은 트랜지스터가 OFF 상태임에도
-                            gate-drain 인접영역의 강한 전계 때문에 누설이 발생하고,
-                            결과적으로 저장 전하가 줄어들어 retention 특성을 악화시키는 현상입니다.”
+                            “GIDL은 OFF-state gate–drain overlap의 강한 전계가
+                            band-to-band tunneling을 유도하여 leakage current를 형성하는 메커니즘입니다.”
                         </p>
                     </div>
 
                     <div class="warning-box">
-                        <h4>발표 시 주의할 점</h4>
+                        <h4>해석 범위</h4>
                         <p>
-                            이 그림은 실제 상용 DRAM 구조를 100% 동일하게 그린 것이 아니라,
-                            GIDL의 핵심 메커니즘을 직관적으로 설명하기 위한 시각화 자료라고 설명하면 됩니다.
+                            실제 leakage 크기와 저장 데이터에 미치는 영향은 device 구조와 bias 조건에 따라 달라집니다.
+                            본 도식은 GIDL의 발생 위치와 carrier separation만 개념적으로 표현합니다.
                         </p>
+                    </div>
+
+                    <div class="source-note">
+                        <span>참고 문헌</span>
+                        <a href="https://doi.org/10.1109/IEDM.2000.904447" target="_blank" rel="noopener noreferrer">
+                            Saino et al., IEDM 2000
+                        </a>
                     </div>
 
                 </div>
@@ -386,13 +381,12 @@
         <section id="gijl" class="page section gijl-section">
 
             <div class="section-title">
-                <p class="eyebrow">Static Fail Mechanism</p>
-                <h2 class="nowrap-title">GIJL: Gate Induced Junction Leakage</h2>
+                <p class="eyebrow">Static Leakage Failure Mechanism</p>
+                <h2 class="nowrap-title">GIJL: Gate-Induced Junction Leakage</h2>
                 <p>
-                    GIJL은 gate bias에 의해 junction 주변의 electric field가 증가하면서
-                    source/drain junction에서 발생하는 누설 전류입니다.
-                    DRAM cell에서는 storage node와 연결된 drain junction을 통해 저장 전하가
-                    기판 방향으로 빠져나가 retention 특성을 악화시킬 수 있습니다.
+                    GIJL은 gate 또는 word-line의 전위가 junction 인접 영역, 특히 구조적으로 전계가 집중되는
+                    WL tip 주변의 전계를 증가시켜 형성되는 gate-induced leakage 성분입니다.
+                    일반적인 reverse-biased PN junction leakage와는 구분하여 설명합니다.
                 </p>
             </div>
 
@@ -405,8 +399,8 @@
 
                     <div class="panel-header">
                         <div>
-                            <h3>GIJL 누설 위치 및 전자 이동</h3>
-                            <p id="gijl-status-text">버튼을 누르면 junction leakage 경로가 표시됩니다.</p>
+                            <h3>GIJL WL Tip–Junction 고전계 영역</h3>
+                            <p id="gijl-status-text" aria-live="polite">버튼을 누르면 junction leakage 경로가 표시됩니다.</p>
                         </div>
 
                         <div id="gijl-state-badge" class="state-badge">OFF 상태</div>
@@ -417,7 +411,8 @@
                  - GIDL과 달리 gate-drain overlap hot spot보다
                    drain junction depletion region을 중심으로 표현
                  ===================================================== -->
-                    <svg id="gijl-svg" viewBox="0 0 1100 620" aria-label="GIJL leakage animation">
+                    <svg id="gijl-svg" viewBox="0 0 1100 620" role="img" focusable="false"
+                        aria-label="GIJL word-line tip and junction high-field conceptual visualization">
 
                         <defs>
                             <!-- 파란 화살표: 전계 방향 -->
@@ -442,9 +437,9 @@
                             </filter>
 
                             <!-- 공핍영역 패턴 -->
-                            <pattern id="gijl-depletion-pattern" width="8" height="8" patternUnits="userSpaceOnUse"
-                                patternTransform="rotate(35)">
-                                <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="2"></line>
+                            <pattern id="gijl-red-depletion-hatch" width="10" height="10" patternUnits="userSpaceOnUse"
+                                patternTransform="rotate(25)">
+                                <line x1="0" y1="0" x2="0" y2="10" stroke="#ef4444" stroke-width="2"></line>
                             </pattern>
                         </defs>
 
@@ -475,7 +470,7 @@
                      2. Bitline / Source terminal
                      ================================================= -->
 
-                        <line x1="315" y1="80" x2="315" y2="242" class="terminal-line"></line>
+                        <line x1="315" y1="80" x2="315" y2="206" class="terminal-line"></line>
                         <circle cx="315" cy="74" r="5" class="terminal-dot"></circle>
                         <text x="275" y="60" class="side-label">Bitline</text>
 
@@ -485,7 +480,7 @@
                      ================================================= -->
 
                         <!-- Storage node contact -->
-                        <line x1="760" y1="138" x2="760" y2="242" class="terminal-line"></line>
+                        <line x1="760" y1="138" x2="760" y2="206" class="terminal-line"></line>
                         <circle cx="760" cy="132" r="5" class="terminal-dot"></circle>
                         <text x="785" y="122" class="side-label">Storage Node</text>
 
@@ -512,17 +507,7 @@
                      4. P-type substrate
                      ================================================= -->
 
-                        <path class="substrate-body" d="M250 242
-                       L420 242
-                       L420 206
-                       L660 206
-                       L660 242
-                       L850 242
-                       L850 500
-                       L250 500
-                       Z">
-                        </path>
-
+                        <rect x="250" y="206" width="600" height="294" class="substrate-body"></rect>
                         <text x="290" y="474" class="substrate-label">P-type Substrate</text>
 
                         <!-- substrate ground -->
@@ -537,43 +522,37 @@
                      ================================================= -->
 
                         <!-- Source diffusion -->
-                        <path class="sd-block source-block" d="M250 242
-                       L420 242
-                       L420 338
-                       Q420 365 390 365
-                       L250 365
-                       Z">
-                        </path>
-                        <text x="305" y="305" class="figure-label-white">Source</text>
+                        <rect x="250" y="206" width="170" height="110" class="sd-block source-block"></rect>
+                        <text x="305" y="272" class="figure-label-white">Source</text>
 
                         <!-- Drain diffusion -->
-                        <path class="sd-block drain-block" d="M660 242
-                       L850 242
-                       L850 365
-                       L705 365
-                       Q660 365 660 322
-                       Z">
-                        </path>
-                        <text x="705" y="306" class="figure-label-white">Drain (n+)</text>
+                        <rect x="660" y="206" width="190" height="110" class="sd-block drain-block"></rect>
+                        <text x="705" y="272" class="figure-label-white">Drain (n+)</text>
 
 
                         <!-- =================================================
-                     6. Drain junction depletion region
-                     - GIJL에서는 gate-drain overlap보다 junction 주변 공핍영역을 강조
-                     ================================================= -->
-
-                        <path class="gijl-junction-depletion" d="M660 278
-                       Q710 235 775 258
-                       Q830 278 850 365
-                       L850 438
-                       L690 438
-                       Q640 398 640 345
-                       Q640 310 660 278
-                       Z">
+                        6. Source / Drain junction depletion region
+                    - GIJL에서는 gate-drain overlap보다 junction 주변 공핍영역을 강조
+                    ================================================= -->
+                        <!-- Source 아래 → Gate Oxide 아래 → Drain junction 아래가 연결된 unified depletion region -->
+                        <path class="clean-gijl-depletion-region gijl-unified-depletion gijl-channel-depletion gijl-drain-clean-depletion"
+                            d="M250 316
+                               L420 316
+                               L420 206
+                               L660 206
+                               L660 316
+                               L850 316
+                               L850 350
+                               L640 350
+                               L640 246
+                               L440 246
+                               L440 350
+                               L250 350
+                               Z">
                         </path>
 
-                        <text x="675" y="405" class="depletion-label strong">Drain junction 공핍영역</text>
-
+                        <text x="282" y="382" class="depletion-label">Source 측 공핍영역</text>
+                        <text x="665" y="382" class="depletion-label strong">Drain junction 공핍영역</text>
 
                         <!-- =================================================
                      7. Channel region
@@ -590,12 +569,12 @@
                      - junction boundary에서 leakage가 발생하는 느낌
                      ================================================= -->
 
-                        <ellipse id="gijl-hotspot" cx="708" cy="350" rx="72" ry="45" class="gijl-hotspot"></ellipse>
+                        <ellipse id="gijl-hotspot" cx="665" cy="316" rx="54" ry="34" class="gijl-hotspot"></ellipse>
 
-                        <text x="730" y="332" class="svg-small gijl-hotspot-label">Junction Leakage 발생 영역</text>
-                        <text x="730" y="352" class="svg-small gijl-hotspot-label">Drain junction edge</text>
+                        <text x="715" y="306" class="svg-small gijl-hotspot-label">GIJL high-field region</text>
+                        <text x="715" y="326" class="svg-small gijl-hotspot-label">WL tip–junction vicinity</text>
 
-                        <path d="M718 350 C760 350, 795 348, 830 342" class="gijl-hotspot-pointer"></path>
+                        <path d="M690 316 C735 310, 780 306, 825 300" class="gijl-hotspot-pointer"></path>
 
 
                         <!-- =================================================
@@ -603,15 +582,15 @@
                      - drain junction에서 substrate 방향으로 전계 집중 표현
                      ================================================= -->
 
-                        <line x1="705" y1="295" x2="705" y2="345" class="gijl-field-arrow"
+                        <line x1="628" y1="214" x2="658" y2="300" class="gijl-field-arrow"
                             marker-end="url(#gijl-blue-arrow)">
                         </line>
 
-                        <line x1="735" y1="305" x2="720" y2="360" class="gijl-field-arrow"
+                        <line x1="650" y1="220" x2="670" y2="315" class="gijl-field-arrow"
                             marker-end="url(#gijl-blue-arrow)">
                         </line>
 
-                        <line x1="765" y1="320" x2="735" y2="378" class="gijl-field-arrow"
+                        <line x1="690" y1="245" x2="690" y2="330" class="gijl-field-arrow"
                             marker-end="url(#gijl-blue-arrow)">
                         </line>
 
@@ -622,10 +601,10 @@
                        junction depletion region을 거쳐 substrate 쪽으로 빠지는 흐름
                      ================================================= -->
 
-                        <path id="gijl-leakage-path" d="M760 84
-                       C760 135, 760 195, 760 242
-                       C748 285, 730 325, 705 360
-                       C680 395, 650 430, 615 460" class="gijl-leakage-path" marker-end="url(#gijl-red-arrow)">
+                        <path id="gijl-leakage-path" d="M760 138
+                       C760 178, 760 220, 760 250
+                       C740 285, 705 305, 665 316
+                       C650 355, 635 410, 615 460" class="gijl-leakage-path" marker-end="url(#gijl-red-arrow)">
                         </path>
 
 
@@ -634,14 +613,14 @@
                      ================================================= -->
 
                         <text x="595" y="520" class="mini-label">
-                            저장 전하가 drain junction을 통해 substrate 방향으로 누설
+                            Gate-induced high-field leakage의 개념적 경로
                         </text>
 
                     </svg>
 
                     <div class="figure-caption">
-                        * GIJL 그림은 실제 상용 DRAM 단면을 그대로 재현한 것이 아니라,
-                        gate bias가 junction depletion region에 미치는 영향과 junction leakage 경로를 설명하기 위한 단순화 도식입니다.
+                        * WL tip–junction 인접 영역의 전계 집중과 leakage-current path를 개념적으로 표현했습니다.
+                        실제 hotspot 위치와 주된 전도 메커니즘은 cell 구조와 공정 조건에 따라 달라질 수 있습니다.
                     </div>
 
                 </div>
@@ -655,54 +634,61 @@
                     <h3>GIJL 핵심 설명</h3>
 
                     <div class="info-box">
-                        <h4>1. Junction 형성</h4>
+                        <h4>1. Junction-adjacent region</h4>
                         <p>
-                            DRAM cell transistor의 source/drain diffusion은 P-type substrate와 PN junction을 형성합니다.
-                            이 junction 주변에는 공핍영역이 존재합니다.
+                            Cell transistor의 diffusion과 substrate는 PN junction을 형성하며,
+                            WL 형상과 junction이 가까운 영역에는 국부 전계가 집중될 수 있습니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>2. Gate 영향</h4>
+                        <h4>2. Gate-induced field enhancement</h4>
                         <p>
-                            Gate bias가 junction 주변의 전계와 공핍영역에 영향을 주면,
-                            junction leakage가 증가할 수 있습니다.
+                            Gate 또는 word-line bias가 WL tip–junction 인접 영역의 전계를 강화하면
+                            GIJL 성분이 증가할 수 있습니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>3. 저장 전하 감소</h4>
+                        <h4>3. Leakage-current path</h4>
                         <p>
-                            Storage node와 연결된 drain junction에서 누설이 커지면,
-                            셀 캐패시터에 저장된 전하가 줄어들어 retention fail 가능성이 증가합니다.
+                            Storage-node-side junction과 연결된 누설 성분은 cell의 저장 전하 또는 전압을 변화시킬 수 있습니다.
+                            본 도식은 그 경로를 정성적으로만 나타냅니다.
                         </p>
                     </div>
 
                     <div class="button-group">
-                        <button id="play-gijl-btn" class="primary-btn">
+                        <button id="play-gijl-btn" class="primary-btn" type="button">
                             GIJL 누설 애니메이션 실행
                         </button>
 
-                        <button id="reset-gijl-btn" class="secondary-btn">
+                        <button id="reset-gijl-btn" class="secondary-btn" type="button">
                             초기화
                         </button>
                     </div>
 
                     <div class="note-box">
-                        <h4>발표할 때 핵심 문장</h4>
+                        <h4>핵심 요약</h4>
                         <p>
-                            “GIJL은 gate bias가 junction depletion region에 영향을 주면서
-                            source/drain junction의 leakage를 증가시키고,
-                            DRAM에서는 storage node 전하 손실을 통해 retention 특성을 악화시킬 수 있습니다.”
+                            “GIJL은 gate 또는 word-line bias가 junction 인접 영역의 전계를 강화하여
+                            형성되는 gate-induced leakage 성분이며, 일반적인 junction leakage와 구분해야 합니다.”
                         </p>
                     </div>
 
                     <div class="warning-box">
-                        <h4>GIDL과의 차이</h4>
+                        <h4>용어 구분</h4>
                         <p>
-                            GIDL은 gate-drain overlap 부근의 강한 전계와 tunneling을 강조하고,
-                            GIJL은 drain junction depletion region을 통한 junction leakage를 강조하면 됩니다.
+                            GIDL은 gate–drain overlap의 tunneling을, GIJL은 WL tip–junction 인접 영역의
+                            gate-induced field enhancement를 강조합니다. Junction Leakage는 reverse-biased PN junction의
+                            일반 누설이며, Capacitor Leakage는 capacitor dielectric을 통과하는 별도 경로입니다.
                         </p>
+                    </div>
+
+                    <div class="source-note">
+                        <span>Public terminology support</span>
+                        <a href="https://doi.org/10.35848/1347-4065/ae5199" target="_blank" rel="noopener noreferrer">
+                            JJAP, 2026 — GIDL/GIJL/PGE/1-RD comparison
+                        </a>
                     </div>
 
                 </div>
@@ -717,12 +703,12 @@
         <section id="pge" class="page section pge-section">
 
             <div class="section-title">
-                <p class="eyebrow">Dynamic Retention Fail Mechanism</p>
+                <p class="eyebrow">Dynamic Interference Failure Mechanism</p>
                 <h2 class="nowrap-title">PGE: Pass Gate Effect</h2>
                 <p>
-                    PGE는 인접한 wordline 또는 passing wordline의 전계 영향으로
-                    선택되지 않은 cell transistor의 barrier가 낮아지고,
-                    저장 전하가 원치 않는 방향으로 빠져나가 retention 특성을 악화시킬 수 있는 현상입니다.
+                    PGE는 인접 Field Pass Word Line(FPWL)의 전계가 비선택 victim cell transistor에 결합하여
+                    channel energy barrier와 threshold voltage(Vth)를 낮추고,
+                    OFF-state subthreshold current를 증가시키는 adjacent-word-line interference입니다.
                 </p>
             </div>
 
@@ -736,7 +722,8 @@
                     <div class="panel-header">
                         <div>
                             <h3>PGE 간섭 위치 및 누설 방향</h3>
-                            <p id="pge-status-text">버튼을 누르면 passing wordline에 의한 barrier lowering이 표시됩니다.</p>
+                            <p id="pge-status-text" aria-live="polite">버튼을 누르면 passing wordline에 의한 barrier lowering이
+                                표시됩니다.</p>
                         </div>
 
                         <div id="pge-state-badge" class="state-badge">대기 상태</div>
@@ -750,7 +737,8 @@
                    3. 인접 WL 전계가 victim cell의 barrier를 낮춤
                    4. Storage node 전하가 누설될 가능성 증가
                  ===================================================== -->
-                    <svg id="pge-svg" viewBox="0 0 1100 620" aria-label="PGE pass gate effect animation">
+                    <svg id="pge-svg" viewBox="0 0 1100 620" role="img" focusable="false"
+                        aria-label="Pass Gate Effect threshold-voltage lowering and subthreshold leakage visualization">
 
                         <defs>
                             <!-- 파란 화살표: 인접 wordline 전계 영향 -->
@@ -961,8 +949,8 @@
 
                         <ellipse id="pge-hotspot" cx="610" cy="350" rx="70" ry="42" class="pge-hotspot"></ellipse>
 
-                        <text x="625" y="335" class="svg-small pge-hotspot-label">Barrier lowering</text>
-                        <text x="625" y="355" class="svg-small pge-hotspot-label">Pass gate effect</text>
+                        <text x="625" y="335" class="svg-small pge-hotspot-label">Vth lowering</text>
+                        <text x="625" y="355" class="svg-small pge-hotspot-label">Subthreshold leakage ↑</text>
 
 
                         <!-- =================================================
@@ -982,7 +970,7 @@
                         </path>
 
                         <text x="328" y="335" class="svg-small pge-leakage-label">
-                            누설 방향
+                            Subthreshold-current path
                         </text>
 
 
@@ -1007,8 +995,8 @@
                     </svg>
 
                     <div class="figure-caption">
-                        * PGE 그림은 실제 상용 DRAM 구조를 그대로 재현한 것이 아니라,
-                        인접 passing wordline이 victim cell의 barrier를 낮추고 누설 가능성을 증가시키는 과정을 설명하기 위한 단순화 도식입니다.
+                        * FPWL 전계 결합 → victim Vth lowering → subthreshold current 증가의 흐름을 나타낸 단순화 도식입니다.
+                        실제 Vth 변화량과 전류는 geometry, bias, oxide/trap 조건에 따라 달라집니다.
                     </div>
 
                 </div>
@@ -1030,47 +1018,52 @@
                     </div>
 
                     <div class="info-box">
-                        <h4>2. Passing wordline의 간섭</h4>
+                        <h4>2. Vth lowering</h4>
                         <p>
-                            인접한 passing wordline이 활성화되면 주변 electric field가 변하고,
-                            victim cell의 channel barrier가 낮아질 수 있습니다.
+                            인접 FPWL이 활성화되면 전계 결합으로 victim channel의 energy barrier와
+                            effective threshold voltage가 낮아질 수 있습니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>3. Barrier lowering에 의한 누설</h4>
+                        <h4>3. Subthreshold leakage 증가</h4>
                         <p>
-                            Barrier가 낮아지면 storage node에 있던 전하가 더 쉽게 빠져나갈 수 있고,
-                            이로 인해 retention fail 가능성이 증가할 수 있습니다.
+                            Vth가 낮아지면 victim transistor가 OFF 상태여도 subthreshold current가 증가하여
+                            storage-node voltage가 원치 않게 변할 수 있습니다.
                         </p>
                     </div>
 
                     <div class="button-group">
-                        <button id="play-pge-btn" class="primary-btn">
+                        <button id="play-pge-btn" class="primary-btn" type="button">
                             PGE 애니메이션 실행
                         </button>
 
-                        <button id="reset-pge-btn" class="secondary-btn">
+                        <button id="reset-pge-btn" class="secondary-btn" type="button">
                             초기화
                         </button>
                     </div>
 
                     <div class="note-box">
-                        <h4>발표할 때 핵심 문장</h4>
+                        <h4>핵심 요약</h4>
                         <p>
-                            “PGE는 인접 passing wordline의 전계가 victim cell의 barrier를 낮춰
-                            원래 OFF 상태에서 막혀 있어야 할 저장 전하가 더 쉽게 빠져나가게 만드는
-                            adjacent wordline interference 현상입니다.”
+                            “PGE는 인접 FPWL의 전계가 victim transistor의 Vth를 낮추고
+                            OFF-state subthreshold current를 증가시키는 adjacent-word-line interference입니다.”
                         </p>
                     </div>
 
                     <div class="warning-box">
-                        <h4>GIDL/GIJL과의 차이</h4>
+                        <h4>메커니즘 구분</h4>
                         <p>
-                            GIDL은 gate-drain overlap의 강한 전계,
-                            GIJL은 junction depletion region,
-                            PGE는 인접 wordline이 victim cell의 barrier를 낮추는 간섭 효과로 구분하면 됩니다.
+                            PGE의 핵심은 gate 자체의 tunneling leakage가 아니라 인접 WL의 electrostatic coupling입니다.
+                            따라서 Vth shift와 subthreshold-current change를 중심으로 해석합니다.
                         </p>
+                    </div>
+
+                    <div class="source-note">
+                        <span>참고 문헌</span>
+                        <a href="https://doi.org/10.5573/JSTS.2023.23.4.236" target="_blank" rel="noopener noreferrer">
+                            Kim et al., JSTS 2023
+                        </a>
                     </div>
 
                 </div>
@@ -1085,12 +1078,12 @@
         <section id="one-rd" class="page section one-rd-section">
 
             <div class="section-title">
-                <p class="eyebrow">Dynamic Disturb Fail Mechanism</p>
+                <p class="eyebrow">Dynamic Disturbance Failure Mechanism</p>
                 <h2 class="nowrap-title">1-RD: 1-Row Disturb</h2>
                 <p>
-                    1-RD는 하나의 aggressor row가 반복적으로 activate/precharge되면서
-                    인접한 victim row의 cell charge가 disturbance를 받고,
-                    충분히 refresh되기 전에 저장 전하가 줄어들면 bit flip 또는 retention fail로 이어질 수 있는 현상입니다.
+                    1-RD는 하나의 aggressor row가 반복적으로 activate/precharge될 때
+                    인접 victim cell에 disturbance가 누적되어 storage-node charge 또는 voltage가 변하는 현상입니다.
+                    변화 방향은 cell state와 구조에 따라 charge loss 또는 gain으로 나타날 수 있으며, 충분히 누적되면 bit flip이 발생합니다.
                 </p>
             </div>
 
@@ -1103,13 +1096,18 @@
 
                     <div class="panel-header">
                         <div>
-                            <h3>1-Row Disturb / RowHammer 시각화</h3>
-                            <p id="one-rd-status-text">
+                            <h3>Repeated Activation and Victim Charge Disturbance</h3>
+                            <p id="one-rd-status-text" aria-live="polite">
                                 버튼을 누르면 aggressor row의 반복 활성화와 victim row disturbance가 표시됩니다.
                             </p>
                         </div>
 
-                        <div id="one-rd-state-badge" class="state-badge">대기 상태</div>
+                        <div class="one-rd-status-group">
+                            <div class="activation-counter" aria-live="polite">
+                                Activation Count <span id="activation-count">0</span>
+                            </div>
+                            <div id="one-rd-state-badge" class="state-badge">대기 상태</div>
+                        </div>
                     </div>
 
                     <!-- =====================================================
@@ -1120,7 +1118,8 @@
                  3. 반복적인 전기적 간섭으로 victim cell의 저장 전하가 줄어들 수 있음
                  4. 충분히 refresh되기 전에 margin이 무너지면 fail 가능성 증가
                  ===================================================== -->
-                    <svg id="one-rd-svg" viewBox="0 0 1100 620" aria-label="1-Row Disturb RowHammer animation">
+                    <svg id="one-rd-svg" viewBox="0 0 1100 620" role="img" focusable="false"
+                        aria-label="Repeated aggressor-row activation and victim-cell charge disturbance visualization">
 
                         <defs>
                             <!-- 파란 화살표: wordline activation / coupling 영향 -->
@@ -1269,7 +1268,7 @@
                         </path>
 
                         <text x="395" y="445" class="svg-small one-rd-leakage-label">
-                            Victim cell charge loss / retention margin 감소
+                            Victim charge gain/loss → data margin 감소
                         </text>
 
 
@@ -1293,8 +1292,8 @@
 
                             <text x="875" y="200" class="mini-label">1. Aggressor row 반복 활성화</text>
                             <text x="875" y="230" class="mini-label">2. 인접 victim row 간섭</text>
-                            <text x="875" y="260" class="mini-label">3. 저장 전하 감소</text>
-                            <text x="875" y="290" class="mini-label">4. Refresh 전 bit flip 가능</text>
+                            <text x="875" y="260" class="mini-label">3. Victim charge/voltage 변화</text>
+                            <text x="875" y="290" class="mini-label">4. D0 또는 D1 bit flip 가능</text>
 
                             <path d="M880 335 L1010 335" class="one-rd-divider-line"></path>
 
@@ -1305,9 +1304,8 @@
                     </svg>
 
                     <div class="figure-caption">
-                        * 1-RD 그림은 실제 DRAM array layout을 그대로 재현한 것이 아니라,
-                        하나의 aggressor row 반복 활성화가 인접 victim row의 저장 전하를 교란하는 RowHammer/1-Row Disturb 개념을 설명하기 위한 단순화
-                        도식입니다.
+                        * 반복 활성화에 따른 victim charge disturbance를 개념적으로 표현했습니다.
+                        아래 방향 화살표는 특정 carrier 이동 방향을 확정한 것이 아니라 disturbance 누적과 data margin 감소를 나타냅니다.
                     </div>
 
                 </div>
@@ -1329,47 +1327,56 @@
                     </div>
 
                     <div class="info-box">
-                        <h4>2. Victim row disturbance</h4>
+                        <h4>2. Victim charge disturbance</h4>
                         <p>
-                            직접 access되지 않은 victim row의 cell capacitor가 영향을 받아
-                            저장 전하가 더 빠르게 줄어들 수 있습니다.
+                            직접 access되지 않은 victim cell도 coupling, carrier transport, trap-related effects 등의 영향을 받아
+                            storage-node charge 또는 voltage가 변할 수 있습니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>3. Bit flip / retention fail</h4>
+                        <h4>3. D0 / D1 Bit Flip</h4>
                         <p>
-                            Refresh 전에 저장 전하가 sensing margin 아래로 떨어지면
-                            데이터가 반전되는 bit flip 또는 retention fail이 발생할 수 있습니다.
+                            반복 disturbance가 data margin을 넘어가면 원래 저장 상태에 따라
+                            0→1 또는 1→0 bit flip이 발생할 수 있습니다.
                         </p>
                     </div>
 
                     <div class="button-group">
-                        <button id="play-one-rd-btn" class="primary-btn">
+                        <button id="play-one-rd-btn" class="primary-btn" type="button">
                             1-RD 애니메이션 실행
                         </button>
 
-                        <button id="reset-one-rd-btn" class="secondary-btn">
+                        <button id="reset-one-rd-btn" class="secondary-btn" type="button">
                             초기화
                         </button>
                     </div>
 
                     <div class="note-box">
-                        <h4>발표할 때 핵심 문장</h4>
+                        <h4>핵심 요약</h4>
                         <p>
-                            “1-RD는 하나의 aggressor row가 반복적으로 활성화되면서
-                            인접한 victim row의 저장 전하를 교란하고,
-                            refresh 전에 전하 margin이 무너지면 bit flip으로 이어질 수 있는
-                            dynamic disturb mechanism입니다.”
+                            “1-RD는 하나의 aggressor row의 반복 활성화가 인접 victim cell의
+                            charge 또는 voltage를 누적 교란하여 bit flip을 유발하는 dynamic disturbance mechanism입니다.”
                         </p>
                     </div>
 
                     <div class="warning-box">
-                        <h4>RowHammer와의 관계</h4>
+                        <h4>원인 해석 시 주의</h4>
                         <p>
-                            RowHammer는 이러한 row disturbance가 시스템 보안 취약점으로까지 이어질 수 있음을 보여준 대표 사례입니다.
-                            여기서는 보안 공격이 아니라 DRAM reliability 관점의 1-row disturb 현상으로 설명합니다.
+                            Repeated activation은 명확한 trigger이지만, charge injection 하나만을 유일한 원인으로 단정하지 않습니다.
+                            세부 경로는 coupling, carrier capture/diffusion/injection, trap-assisted effect와 cell 구조에 따라 달라질
+                            수 있습니다.
                         </p>
+                    </div>
+
+                    <div class="source-note">
+                        <span>참고 문헌</span>
+                        <a href="https://doi.org/10.1109/ISCA.2014.6853210" target="_blank" rel="noopener noreferrer">
+                            Kim et al., ISCA 2014
+                        </a>
+                        <a href="https://doi.org/10.3390/electronics13244936" target="_blank" rel="noopener noreferrer">
+                            Device-level D0/D1 analysis, Electronics 2024
+                        </a>
                     </div>
 
                 </div>
@@ -1384,12 +1391,12 @@
         <section id="trdl" class="page section trdl-section">
 
             <div class="section-title">
-                <p class="eyebrow">Write & Fail Timing Mechanism</p>
-                <h2 class="nowrap-title">tRDL: Write Timing Margin Fail</h2>
+                <p class="eyebrow">Write-to-Precharge Timing Failure</p>
+                <h2 class="nowrap-title">tRDL: Last Data-In to Row-Precharge Delay</h2>
                 <p>
-                    tRDL은 공간적으로 특정 누설 경로를 보여주는 fail이라기보다,
-                    write 동작 후 cell capacitor의 전압이 충분히 안정화되기 전에
-                    다음 동작으로 넘어가면서 write margin이 부족해지는 timing fail로 설명할 수 있습니다.
+                    tRDL은 마지막 WRITE data가 입력된 시점부터 row PRECHARGE까지 확보되는 delay입니다.
+                    이 시간이 부족하거나 cell transistor·storage-node contact의 저항이 커 charge transfer가 지연되면,
+                    precharge 이전에 cell voltage가 목표 level에 도달하지 못해 time-delay failure가 발생할 수 있습니다.
                 </p>
             </div>
 
@@ -1402,9 +1409,9 @@
 
                     <div class="panel-header">
                         <div>
-                            <h3>tRDL Write Timing Margin 시각화</h3>
-                            <p id="trdl-status-text">
-                                버튼을 누르면 정상 write window와 tRDL-short fail window가 비교 표시됩니다.
+                            <h3>tRDL Cell-Transfer Delay Visualization</h3>
+                            <p id="trdl-status-text" aria-live="polite">
+                                버튼을 누르면 normal cell과 high-LDD-resistance cell의 voltage response가 비교 표시됩니다.
                             </p>
                         </div>
 
@@ -1415,13 +1422,14 @@
                  tRDL SVG 시각화 도면
 
                  핵심 아이디어:
-                 1. Write command가 들어옴
-                 2. Wordline이 켜지고 bitline/write driver가 cell을 충전 또는 방전
-                 3. 충분한 시간이 있으면 cell voltage가 target level에 안정적으로 도달
-                 4. tRDL margin이 부족하면 voltage가 아직 애매한 상태에서 다음 동작으로 넘어감
-                 5. sensing margin이 부족해 write fail 가능성이 증가
+                 1. 마지막 WRITE data 이후 tRDL window가 시작됨
+                 2. Access transistor를 통해 cell capacitor의 charge transfer가 진행됨
+                 3. 정상 resistance에서는 PRE 전에 target voltage에 도달
+                 4. 높은 LDD/SNC resistance에서는 cell-voltage response가 지연됨
+                 5. PRE 시점까지 필요한 margin을 확보하지 못하면 time-delay fail 가능
                  ===================================================== -->
-                    <svg id="trdl-svg" viewBox="0 0 1100 620" aria-label="tRDL write timing margin fail animation">
+                    <svg id="trdl-svg" viewBox="0 0 1100 620" role="img" focusable="false"
+                        aria-label="tRDL normal versus high-LDD-resistance cell transfer delay visualization">
 
                         <defs>
                             <!-- 파란 화살표: 정상 write 진행 -->
@@ -1461,7 +1469,7 @@
                      ================================================= -->
 
                         <rect x="85" y="80" width="405" height="215" rx="20" class="trdl-cell-panel"></rect>
-                        <text x="110" y="112" class="figure-label-dark small-figure-text">Write Path / Cell Level</text>
+                        <text x="110" y="112" class="figure-label-dark small-figure-text">Cell-Transfer Path</text>
 
                         <!-- Bitline -->
                         <line x1="155" y1="135" x2="155" y2="260" class="terminal-line"></line>
@@ -1505,7 +1513,8 @@
                             marker-end="url(#trdl-red-arrow)">
                         </path>
 
-                        <text x="360" y="278" class="svg-small trdl-cell-fail-label">cell voltage 미완성</text>
+                        <text x="360" y="278" class="svg-small trdl-cell-fail-label">delayed cell-voltage
+                            response</text>
 
 
                         <!-- =================================================
@@ -1527,7 +1536,7 @@
 
                         <rect x="840" y="145" width="125" height="48" rx="10"
                             class="trdl-command-box trdl-command-next"></rect>
-                        <text x="868" y="175" class="figure-label-white">NEXT OP</text>
+                        <text x="885" y="175" class="figure-label-white">PRE</text>
 
                         <line x1="675" y1="169" x2="705" y2="169" class="trdl-command-arrow"
                             marker-end="url(#trdl-blue-arrow)"></line>
@@ -1539,11 +1548,11 @@
                         <line x1="755" y1="230" x2="910" y2="230" class="trdl-window-line"></line>
                         <line x1="755" y1="218" x2="755" y2="242" class="trdl-window-tick"></line>
                         <line x1="910" y1="218" x2="910" y2="242" class="trdl-window-tick"></line>
-                        <text x="780" y="258" class="mini-label">Required write margin</text>
+                        <text x="780" y="258" class="mini-label">tRDL: WRITE → PRE window</text>
 
                         <!-- violation zone -->
                         <rect x="830" y="213" width="80" height="34" rx="8" class="trdl-violation-zone"></rect>
-                        <text x="830" y="207" class="svg-small trdl-violation-label">Too short</text>
+                        <text x="830" y="207" class="svg-small trdl-violation-label">Delay exceeds window</text>
 
 
                         <!-- =================================================
@@ -1551,8 +1560,9 @@
                      ================================================= -->
 
                         <rect x="85" y="330" width="930" height="215" rx="22" class="trdl-wave-panel"></rect>
-                        <text x="112" y="363" class="figure-label-dark small-figure-text">Waveform View: 정상 Write vs
-                            tRDL-short Fail</text>
+                        <text x="112" y="363" class="figure-label-dark small-figure-text">Cell Voltage Response: Normal
+                            vs
+                            High-LDD-Resistance Cell</text>
 
                         <!-- axis -->
                         <line x1="145" y1="500" x2="950" y2="500" class="trdl-axis-line"></line>
@@ -1585,32 +1595,32 @@
 
                         <!-- sensing threshold -->
                         <line x1="145" y1="430" x2="950" y2="430" class="trdl-threshold-line"></line>
-                        <text x="820" y="422" class="mini-label">write verify / sensing margin 기준</text>
+                        <text x="820" y="422" class="mini-label">minimum cell-voltage margin</text>
 
                         <!-- enough margin marker -->
                         <line x1="760" y1="380" x2="760" y2="500" class="trdl-good-deadline"></line>
-                        <text x="735" y="525" class="mini-label">정상 margin</text>
+                        <text x="735" y="525" class="mini-label">allowed window end</text>
 
                         <!-- short timing marker -->
                         <line x1="650" y1="380" x2="650" y2="500" class="trdl-short-deadline"></line>
-                        <text x="610" y="525" class="mini-label trdl-short-label">tRDL short</text>
+                        <text x="610" y="525" class="mini-label trdl-short-label">delay limit</text>
 
                         <!-- fail region highlight -->
                         <rect x="650" y="430" width="110" height="70" rx="10" class="trdl-wave-fail-zone"></rect>
-                        <text x="665" y="472" class="svg-small trdl-wave-fail-text">margin 부족</text>
+                        <text x="665" y="472" class="svg-small trdl-wave-fail-text">target 미도달</text>
 
                         <!-- legend -->
                         <line x1="165" y1="530" x2="205" y2="530" class="trdl-cell-good-wave"></line>
-                        <text x="215" y="535" class="mini-label">충분한 write time</text>
+                        <text x="215" y="535" class="mini-label">Normal cell resistance</text>
 
                         <line x1="375" y1="530" x2="415" y2="530" class="trdl-cell-bad-wave"></line>
-                        <text x="425" y="535" class="mini-label">tRDL 부족</text>
+                        <text x="425" y="535" class="mini-label">High LDD resistance</text>
 
                     </svg>
 
                     <div class="figure-caption">
-                        * tRDL 그림은 특정 물리적 단면 누설 경로가 아니라,
-                        write 동작 후 cell voltage가 목표 level까지 안정화되는 데 필요한 timing margin을 설명하기 위한 단순화 도식입니다.
+                        * 동일한 허용 시간에서 cell-transistor resistance가 큰 경우 charge transfer와 cell-voltage response가
+                        느려지는 현상을 나타낸 개념도입니다. 곡선과 임계값은 실측값이 아닌 Conceptual Illustration입니다.
                     </div>
 
                 </div>
@@ -1624,55 +1634,66 @@
                     <h3>tRDL 핵심 설명</h3>
 
                     <div class="info-box">
-                        <h4>1. Write는 시간이 필요함</h4>
+                        <h4>1. Finite charge-transfer time</h4>
                         <p>
-                            WRITE command가 들어오면 bitline/write driver가 cell capacitor의 전압을 원하는 data level로 밀어줍니다.
-                            하지만 cell voltage가 목표 level까지 안정화되는 데는 일정 시간이 필요합니다.
+                            Bitline과 cell capacitor 사이의 charge transfer는 access transistor의 resistance와
+                            cell capacitance에 의해 즉시 완료되지 않고 유한한 시간이 필요합니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>2. Timing margin 부족</h4>
+                        <h4>2. High LDD resistance</h4>
                         <p>
-                            tRDL 조건이 너무 짧거나 내부 delay margin이 부족하면,
-                            cell voltage가 충분히 안정화되기 전에 다음 동작이 진행될 수 있습니다.
+                            Cell transistor의 LDD resistance가 높아지면 transfer path의 effective resistance가 증가하여
+                            cell-voltage 상승 또는 하강 응답이 느려질 수 있습니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>3. Write fail 가능성</h4>
+                        <h4>3. Time-delay failure</h4>
                         <p>
-                            이때 cell에 저장된 전압이 sensing margin 근처에 머무르면,
-                            이후 read 또는 refresh 과정에서 잘못된 data로 판단될 가능성이 증가합니다.
+                            허용된 동작 시간 내 cell voltage가 필요한 margin에 도달하지 못하면
+                            이후 sensing 또는 data 유지 과정에서 fail로 관측될 수 있습니다.
                         </p>
                     </div>
 
                     <div class="button-group">
-                        <button id="play-trdl-btn" class="primary-btn">
+                        <button id="play-trdl-btn" class="primary-btn" type="button">
                             tRDL 애니메이션 실행
                         </button>
 
-                        <button id="reset-trdl-btn" class="secondary-btn">
+                        <button id="reset-trdl-btn" class="secondary-btn" type="button">
                             초기화
                         </button>
                     </div>
 
                     <div class="note-box">
-                        <h4>발표할 때 핵심 문장</h4>
+                        <h4>핵심 요약</h4>
                         <p>
-                            “tRDL은 누설 위치를 보는 fail이라기보다,
-                            write 이후 cell voltage가 충분히 안정화되기 전에 다음 동작으로 넘어가면서
-                            write margin이 부족해지는 timing-related fail로 볼 수 있습니다.”
+                            “tRDL은 마지막 WRITE data 이후 PRECHARGE까지의 시간이며,
+                            cell-path resistance가 커 charge transfer가 지연되면 해당 window 안에 충분한 cell-voltage margin을 확보하지 못할
+                            수 있습니다.”
                         </p>
                     </div>
 
                     <div class="warning-box">
-                        <h4>시각화 포인트</h4>
+                        <h4>적용 범위</h4>
                         <p>
-                            GIDL/GIJL/1-RD처럼 전하가 빠져나가는 경로를 그리기보다,
-                            정상 waveform과 tRDL-short waveform을 비교해서
-                            ‘충분히 올라간 cell voltage’와 ‘margin이 부족한 cell voltage’를 보여주는 방식이 더 적합합니다.
+                            공개 문헌에서는 tRDL을 last data-in부터 row precharge까지의 delay로 설명하고,
+                            high LDD resistance 또는 storage-node-contact resistance 증가와의 연관성을 보고합니다.
+                            실제 사내 test condition과 pass/fail criterion은 팀 기준으로 최종 확인해야 합니다.
                         </p>
+                    </div>
+
+                    <div class="source-note">
+                        <span>참고 문헌</span>
+                        <a href="https://doi.org/10.1016/S0026-2714(03)00259-2" target="_blank"
+                            rel="noopener noreferrer">
+                            Cell-transistor root-cause analysis, 2003
+                        </a>
+                        <a href="https://doi.org/10.1109/TED.2023.3280890" target="_blank" rel="noopener noreferrer">
+                            Storage-node-contact resistance and tRDL, 2023
+                        </a>
                     </div>
 
                 </div>
@@ -1681,28 +1702,17 @@
 
         </section>
 
-        <!-- =========================================================
-             다음 구현 대상
-             ========================================================= -->
-        <section id="next" class="page section placeholder-section">
-
-            <div class="section-title">
-                <p class="eyebrow">Next Implementation</p>
-                <h2>다음 구현 대상</h2>
-                <p>
-                    이후 같은 형식으로 tRDL을 추가할 예정입니다.
-                </p>
-            </div>
-
-            <div class="placeholder-grid">
-                <div class="placeholder-card">tRDL Animation</div>
-            </div>
-
-        </section>
 
     </main>
 
-    <script src="script.js"></script>
+    <footer class="site-footer">
+        <p>
+            Generative AI-Assisted Interactive Conceptual Visualization · Public sources only ·
+            No proprietary product data · Not a TCAD/SPICE or predictive simulation
+        </p>
+    </footer>
+
+    <script src="script.js" defer></script>
 </body>
 
 </html>
