@@ -31,12 +31,41 @@ function restartBodyClass(className) {
     document.body.classList.add(className);
 }
 
+/*
+   1-RD 카운터 timer 정리용 함수
+   - 다른 mechanism으로 이동하거나 reset할 때
+   - timer가 뒤에서 계속 도는 문제를 막기 위함
+*/
+let oneRdCountTimer = null;
+let oneRdActivationCount = 0;
+
+function clearOneRdCounter() {
+    if (oneRdCountTimer) {
+        clearInterval(oneRdCountTimer);
+        oneRdCountTimer = null;
+    }
+
+    oneRdActivationCount = 0;
+
+    const activationCountText = getElement("activation-count");
+
+    if (activationCountText) {
+        activationCountText.textContent = "0";
+    }
+}
+
 function clearAllMechanismAnimations() {
     document.body.classList.remove("gidl-active");
     document.body.classList.remove("gijl-active");
     document.body.classList.remove("pge-active");
     document.body.classList.remove("one-rd-active");
     document.body.classList.remove("trdl-active");
+
+    /*
+       one-rd-active class가 제거될 때
+       activation count timer도 같이 멈춰야 함
+    */
+    clearOneRdCounter();
 }
 
 
@@ -82,6 +111,7 @@ const resetOneRdButton = getElement("reset-one-rd-btn");
 
 const oneRdStatusText = getElement("one-rd-status-text");
 const oneRdStateBadge = getElement("one-rd-state-badge");
+const activationCountText = getElement("activation-count");
 
 
 /* =========================================================
@@ -135,11 +165,15 @@ function resetPgeText() {
 function resetOneRdText() {
     if (oneRdStatusText) {
         oneRdStatusText.textContent =
-            "버튼을 누르면 aggressor row의 반복 활성화와 victim row disturbance가 표시됩니다.";
+            "버튼을 누르면 aggressor activation → capture → trap generation → diffusion → victim D1 margin 감소 과정이 표시됩니다.";
     }
 
     if (oneRdStateBadge) {
         oneRdStateBadge.textContent = "대기 상태";
+    }
+
+    if (activationCountText) {
+        activationCountText.textContent = "0";
     }
 }
 
@@ -260,21 +294,54 @@ function playOneRdAnimation() {
 
     if (oneRdStatusText) {
         oneRdStatusText.textContent =
-            "Aggressor row의 반복 활성화가 인접 victim row에 disturbance를 주는 중입니다.";
+            "Aggressor WL 반복 활성화로 capture 영역의 trap이 증가하고, diffusion 경로를 통해 victim D1 margin이 감소하는 중입니다.";
     }
 
     if (oneRdStateBadge) {
-        oneRdStateBadge.textContent = "Disturbance 발생";
+        oneRdStateBadge.textContent = "D1 Margin 감소";
     }
 
     resetGidlText();
     resetGijlText();
     resetPgeText();
     resetTrdlText();
+
+    /*
+       발표용 activation count
+       - 실제 RowHammer threshold count가 아님
+       - 반복 ACT/PRE가 누적된다는 개념을 보여주는 숫자
+    */
+    oneRdActivationCount = 0;
+
+    if (activationCountText) {
+        activationCountText.textContent = "0";
+    }
+
+    if (oneRdCountTimer) {
+        clearInterval(oneRdCountTimer);
+    }
+
+    oneRdCountTimer = setInterval(() => {
+        oneRdActivationCount += 1;
+
+        if (activationCountText) {
+            activationCountText.textContent = oneRdActivationCount;
+        }
+
+        if (oneRdActivationCount >= 12) {
+            clearInterval(oneRdCountTimer);
+            oneRdCountTimer = null;
+
+            if (oneRdStateBadge) {
+                oneRdStateBadge.textContent = "Bit Flip Risk ↑";
+            }
+        }
+    }, 300);
 }
 
 function resetOneRdAnimation() {
     document.body.classList.remove("one-rd-active");
+    clearOneRdCounter();
     resetOneRdText();
 }
 

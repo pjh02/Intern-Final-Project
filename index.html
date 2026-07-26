@@ -228,7 +228,8 @@
                              ================================================= -->
                         <!-- Source depletion -->
                         <!-- Source 아래 → Gate Oxide 아래 → Drain 아래가 연결된 unified depletion region -->
-                        <path class="clean-depletion-region gidl-unified-depletion gidl-channel-depletion gidl-drain-clean-depletion"
+                        <path
+                            class="clean-depletion-region gidl-unified-depletion gidl-channel-depletion gidl-drain-clean-depletion"
                             d="M250 316
                                L420 316
                                L420 206
@@ -535,7 +536,8 @@
                     - GIJL에서는 gate-drain overlap보다 junction 주변 공핍영역을 강조
                     ================================================= -->
                         <!-- Source 아래 → Gate Oxide 아래 → Drain junction 아래가 연결된 unified depletion region -->
-                        <path class="clean-gijl-depletion-region gijl-unified-depletion gijl-channel-depletion gijl-drain-clean-depletion"
+                        <path
+                            class="clean-gijl-depletion-region gijl-unified-depletion gijl-channel-depletion gijl-drain-clean-depletion"
                             d="M250 316
                                L420 316
                                L420 206
@@ -1075,6 +1077,9 @@
         <!-- =========================================================
      1-RD Section
      ========================================================= -->
+        <!-- =========================================================
+     1-RD Section
+     ========================================================= -->
         <section id="one-rd" class="page section one-rd-section">
 
             <div class="section-title">
@@ -1112,26 +1117,30 @@
 
                     <!-- =====================================================
                  1-RD SVG 시각화 도면
-                 핵심:
-                 1. Aggressor row가 반복적으로 activate/precharge됨
-                 2. 인접 victim row는 직접 access되지 않음
-                 3. 반복적인 전기적 간섭으로 victim cell의 저장 전하가 줄어들 수 있음
-                 4. 충분히 refresh되기 전에 margin이 무너지면 fail 가능성 증가
+                 - 왼쪽: D1 failure
+                 - 오른쪽: D0 failure
+                 - U자 실린더 6개는 모두 같은 크기와 같은 곡률로 맞춤
                  ===================================================== -->
                     <svg id="one-rd-svg" viewBox="0 0 1100 620" role="img" focusable="false"
-                        aria-label="Repeated aggressor-row activation and victim-cell charge disturbance visualization">
+                        aria-label="1-RD D1 and D0 failure conceptual visualization">
 
                         <defs>
-                            <!-- 파란 화살표: wordline activation / coupling 영향 -->
-                            <marker id="one-rd-blue-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
+                            <!-- 검은 화살표: 기본 방향 표시 -->
+                            <marker id="one-rd-black-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
                                 orient="auto">
-                                <path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"></path>
+                                <path d="M0,0 L0,6 L9,3 z" fill="#111827"></path>
                             </marker>
 
-                            <!-- 빨간 화살표: victim cell charge disturbance 방향 -->
+                            <!-- 빨간 화살표: carrier / disturbance 흐름 -->
                             <marker id="one-rd-red-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
                                 orient="auto">
                                 <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"></path>
+                            </marker>
+
+                            <!-- 파란 화살표: aggressor stress -->
+                            <marker id="one-rd-blue-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
+                                orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"></path>
                             </marker>
 
                             <!-- glow 효과 -->
@@ -1142,170 +1151,237 @@
                                     <feMergeNode in="SourceGraphic"></feMergeNode>
                                 </feMerge>
                             </filter>
-
-                            <!-- victim row disturbance 영역 패턴 -->
-                            <pattern id="one-rd-disturb-pattern" width="8" height="8" patternUnits="userSpaceOnUse"
-                                patternTransform="rotate(35)">
-                                <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="2"></line>
-                            </pattern>
                         </defs>
 
-                        <!-- 전체 도면 배경 -->
+                        <!-- 전체 배경 -->
                         <rect x="30" y="30" width="1040" height="560" rx="24" class="figure-bg"></rect>
 
+                        <!-- =====================================================
+                     LEFT PANEL : D1 FAILURE
+                     ===================================================== -->
+                        <g id="one-rd-d1-panel">
 
-                        <!-- =================================================
-                     1. Bank / Array 단순 배경
-                     ================================================= -->
+                            <!-- 노란 패널 -->
+                            <rect x="70" y="160" width="430" height="390" class="one-rd-ref-panel"></rect>
 
-                        <rect x="100" y="105" width="720" height="390" rx="18" class="one-rd-array-bg"></rect>
-                        <text x="120" y="88" class="figure-label-dark small-figure-text">
-                            DRAM Cell Array 일부
-                        </text>
+                            <!-- 세 slot: 같은 크기, 같은 y 시작점 -->
+                            <rect x="130" y="170" width="88" height="300" class="one-rd-blue-slot"></rect>
+                            <rect x="265" y="170" width="88" height="300" class="one-rd-open-slot"></rect>
+                            <rect x="400" y="170" width="88" height="300" class="one-rd-blue-slot"></rect>
 
+                            <!-- 파란 U 실린더: slot 중앙, 대칭, 동일 크기 -->
+                            <path d="M146 190
+                             L202 190
+                             L202 340
+                             C202 392, 190 442, 174 466
+                             C158 442, 146 392, 146 340
+                             Z" class="one-rd-aggressor-blue"></path>
 
-                        <!-- =================================================
-                     2. Aggressor Row
-                     ================================================= -->
+                            <!-- 살색 U 실린더: slot 중앙, 대칭, 동일 크기 -->
+                            <path d="M281 190
+                             L337 190
+                             L337 340
+                             C337 392, 325 442, 309 466
+                             C293 442, 281 392, 281 340
+                             Z" class="one-rd-passive-peach"></path>
 
-                        <rect x="150" y="140" width="620" height="70" rx="12" class="one-rd-aggressor-row"></rect>
-                        <text x="170" y="183" class="figure-label-white">Aggressor Row</text>
-                        <text x="550" y="183" class="figure-label-white">Repeated ACT / PRE</text>
+                            <!-- 빨간 U 실린더: 파란/살색과 완전히 같은 크기 -->
+                            <path d="M416 190
+                             L472 190
+                             L472 340
+                             C472 392, 460 442, 444 466
+                             C428 442, 416 392, 416 340
+                             Z" class="one-rd-victim-red"></path>
 
-                        <!-- aggressor wordline pulse 표시 -->
-                        <path id="one-rd-hammer-pulse-1"
-                            d="M175 125 L220 125 L220 105 L270 105 L270 125 L320 125 L320 105 L370 105 L370 125"
-                            class="one-rd-pulse-line">
-                        </path>
+                            <!-- Aggressor label: slot/U자 도형 위에 보이도록 뒤쪽에 배치 -->
+                            <text x="92" y="210" class="one-rd-ref-label">Aggressor</text>
+                            <path d="M150 218 L174 238" class="one-rd-small-black-arrow"
+                                marker-end="url(#one-rd-black-arrow)">
+                            </path>
 
-                        <path id="one-rd-hammer-pulse-2"
-                            d="M410 125 L455 125 L455 105 L505 105 L505 125 L555 125 L555 105 L605 105 L605 125"
-                            class="one-rd-pulse-line">
-                        </path>
+                            <!-- Victim capacitor: 가운데 slot과 세 번째 slot 사이 위 -->
+                            <text x="376" y="50" text-anchor="middle" class="one-rd-victim-title">Victim</text>
+                            <line x1="376" y1="92" x2="376" y2="160" class="one-rd-cap-wire"></line>
+                            <rect x="349" y="64" width="54" height="26" rx="13" class="one-rd-cap-body"></rect>
+                            <ellipse cx="376" cy="64" rx="27" ry="8" class="one-rd-cap-top"></ellipse>
+                            <ellipse cx="376" cy="90" rx="27" ry="8" class="one-rd-cap-bottom"></ellipse>
 
-                        <text x="175" y="238" class="mini-label">
-                            같은 row가 짧은 시간에 반복적으로 열리고 닫힘
-                        </text>
+                            <!-- D1 victim column stored state -->
+                            <g id="one-rd-victim-positive-charge">
+                                <circle cx="376" cy="198" r="7" class="one-rd-positive-charge"></circle>
+                                <circle cx="376" cy="254" r="7" class="one-rd-positive-charge"></circle>
+                                <circle cx="376" cy="310" r="7" class="one-rd-positive-charge"></circle>
+                            </g>
 
+                            <!-- D1 방향: 아래에서 위로 -->
+                            <path d="M376 338 L376 230" class="one-rd-static-victim-arrow"
+                                marker-end="url(#one-rd-black-arrow)">
+                            </path>
 
-                        <!-- =================================================
-                     3. Victim Row
-                     ================================================= -->
+                            <path id="one-rd-victim-disturb-arrow" d="M376 338 L376 230"
+                                class="one-rd-victim-disturb-arrow" marker-end="url(#one-rd-red-arrow)">
+                            </path>
 
-                        <rect x="150" y="285" width="620" height="95" rx="12" class="one-rd-victim-row"></rect>
-                        <text x="170" y="325" class="figure-label-dark">Victim Row</text>
-                        <text x="170" y="350" class="mini-label">직접 access되지 않은 인접 row</text>
+                            <!-- Aggressor stress arrow -->
+                            <line x1="174" y1="198" x2="184" y2="404" class="one-rd-coupling-arrow"
+                                marker-end="url(#one-rd-blue-arrow)">
+                            </line>
 
-                        <!-- victim row disturbance zone -->
-                        <rect x="395" y="300" width="240" height="65" rx="14" class="one-rd-disturb-zone"></rect>
-                        <text x="435" y="340" class="depletion-label strong">Disturbance 영역</text>
+                            <!-- Capture / Diffusion label -->
+                            <text x="125" y="528" class="one-rd-ref-label">Capture</text>
+                            <path d="M140 494 C165 510, 194 510, 225 492" class="one-rd-bracket-line"></path>
 
+                            <text x="275" y="528" class="one-rd-ref-label">Diffusion</text>
+                            <path d="M258 492 C304 510, 348 510, 408 488" class="one-rd-bracket-line"></path>
 
-                        <!-- =================================================
-                     4. Victim Cell Capacitors
-                     - 저장 전하는 capacitor 아래쪽에 고정 표시
-                     ================================================= -->
+                            <!-- D1 Capture zone -->
+                            <ellipse cx="182" cy="448" rx="72" ry="38" class="one-rd-capture-zone"></ellipse>
 
-                        <!-- victim capacitor 1 -->
-                        <line x1="430" y1="260" x2="430" y2="300" class="storage-wire"></line>
-                        <line x1="400" y1="250" x2="460" y2="250" class="capacitor-line"></line>
-                        <line x1="400" y1="268" x2="460" y2="268" class="capacitor-line"></line>
-                        <circle cx="415" cy="282" r="5" class="one-rd-stored-charge"></circle>
-                        <circle cx="445" cy="282" r="5" class="one-rd-stored-charge"></circle>
+                            <!-- D1 Capture electrons -->
+                            <g id="one-rd-capture-electrons">
+                                <circle cx="118" cy="418" r="8" class="one-rd-mobile-electron e1"></circle>
+                                <circle cx="136" cy="478" r="8" class="one-rd-mobile-electron e2"></circle>
+                                <circle cx="174" cy="486" r="8" class="one-rd-mobile-electron e3"></circle>
+                                <circle cx="214" cy="476" r="8" class="one-rd-mobile-electron e4"></circle>
+                                <circle cx="238" cy="435" r="8" class="one-rd-mobile-electron e5"></circle>
+                            </g>
 
-                        <!-- victim capacitor 2 -->
-                        <line x1="525" y1="260" x2="525" y2="300" class="storage-wire"></line>
-                        <line x1="495" y1="250" x2="555" y2="250" class="capacitor-line"></line>
-                        <line x1="495" y1="268" x2="555" y2="268" class="capacitor-line"></line>
-                        <circle cx="510" cy="282" r="5" class="one-rd-stored-charge"></circle>
-                        <circle cx="540" cy="282" r="5" class="one-rd-stored-charge"></circle>
+                            <!-- D1 trap dots -->
+                            <g id="one-rd-generated-traps">
+                                <circle cx="150" cy="444" r="5" class="one-rd-trap-dot t1"></circle>
+                                <circle cx="170" cy="460" r="5" class="one-rd-trap-dot t2"></circle>
+                                <circle cx="192" cy="444" r="5" class="one-rd-trap-dot t3"></circle>
+                                <circle cx="214" cy="458" r="5" class="one-rd-trap-dot t4"></circle>
+                                <circle cx="186" cy="476" r="5" class="one-rd-trap-dot t5"></circle>
+                            </g>
 
-                        <!-- victim capacitor 3 -->
-                        <line x1="620" y1="260" x2="620" y2="300" class="storage-wire"></line>
-                        <line x1="590" y1="250" x2="650" y2="250" class="capacitor-line"></line>
-                        <line x1="590" y1="268" x2="650" y2="268" class="capacitor-line"></line>
-                        <circle cx="605" cy="282" r="5" class="one-rd-stored-charge"></circle>
-                        <circle cx="635" cy="282" r="5" class="one-rd-stored-charge"></circle>
+                            <!-- D1 diffusion: 왼쪽 capture → 오른쪽 victim 쪽 -->
+                            <path d="M238 458
+                             C290 488, 334 488, 396 452" class="one-rd-static-diffusion-arrow"
+                                marker-end="url(#one-rd-black-arrow)">
+                            </path>
 
+                            <path id="one-rd-diffusion-path" d="M238 458
+                           C290 488, 334 488, 396 452" class="one-rd-diffusion-path"
+                                marker-end="url(#one-rd-red-arrow)">
+                            </path>
 
-                        <!-- =================================================
-                     5. Coupling / disturbance arrows
-                     - aggressor row의 반복 활성화가 인접 victim row에 영향을 주는 방향
-                     ================================================= -->
-
-                        <line x1="430" y1="210" x2="430" y2="285" class="one-rd-coupling-arrow"
-                            marker-end="url(#one-rd-blue-arrow)">
-                        </line>
-
-                        <line x1="525" y1="210" x2="525" y2="285" class="one-rd-coupling-arrow"
-                            marker-end="url(#one-rd-blue-arrow)">
-                        </line>
-
-                        <line x1="620" y1="210" x2="620" y2="285" class="one-rd-coupling-arrow"
-                            marker-end="url(#one-rd-blue-arrow)">
-                        </line>
-
-                        <text x="655" y="268" class="svg-small one-rd-coupling-label">
-                            repeated activation에 의한 cell-to-cell interference
-                        </text>
-
-
-                        <!-- =================================================
-                     6. Charge loss / fail direction
-                     - 전자 dot 이동이 아니라 victim row 저장 전하가 흔들리는 방향을 화살표로 표현
-                     ================================================= -->
-
-                        <path id="one-rd-leakage-path-1" d="M430 282
-                       C430 325, 430 365, 430 420" class="one-rd-leakage-path" marker-end="url(#one-rd-red-arrow)">
-                        </path>
-
-                        <path id="one-rd-leakage-path-2" d="M525 282
-                       C525 325, 525 365, 525 420" class="one-rd-leakage-path" marker-end="url(#one-rd-red-arrow)">
-                        </path>
-
-                        <path id="one-rd-leakage-path-3" d="M620 282
-                       C620 325, 620 365, 620 420" class="one-rd-leakage-path" marker-end="url(#one-rd-red-arrow)">
-                        </path>
-
-                        <text x="395" y="445" class="svg-small one-rd-leakage-label">
-                            Victim charge gain/loss → data margin 감소
-                        </text>
-
-
-                        <!-- =================================================
-                     7. Optional lower row 표시
-                     - double-sided hammering이 아니라 1-RD임을 보여주기 위해 약하게 표시
-                     ================================================= -->
-
-                        <rect x="150" y="420" width="620" height="45" rx="10" class="one-rd-passive-row"></rect>
-                        <text x="170" y="450" class="mini-label">Other row / not hammered</text>
-
-
-                        <!-- =================================================
-                     8. 오른쪽 설명 패널
-                     ================================================= -->
-
-                        <g id="one-rd-info-box">
-                            <rect x="850" y="125" width="190" height="280" rx="18" class="band-panel"></rect>
-
-                            <text x="875" y="160" class="figure-label-dark small-figure-text">1-RD 핵심</text>
-
-                            <text x="875" y="200" class="mini-label">1. Aggressor row 반복 활성화</text>
-                            <text x="875" y="230" class="mini-label">2. 인접 victim row 간섭</text>
-                            <text x="875" y="260" class="mini-label">3. Victim charge/voltage 변화</text>
-                            <text x="875" y="290" class="mini-label">4. D0 또는 D1 bit flip 가능</text>
-
-                            <path d="M880 335 L1010 335" class="one-rd-divider-line"></path>
-
-                            <text x="875" y="370" class="mini-label">Single-sided RowHammer</text>
-                            <text x="875" y="395" class="mini-label">= one aggressor row 중심</text>
+                            <g id="one-rd-diffusion-electrons">
+                                <circle cx="258" cy="466" r="7" class="one-rd-diffusion-electron d1"></circle>
+                                <circle cx="306" cy="482" r="7" class="one-rd-diffusion-electron d2"></circle>
+                                <circle cx="352" cy="470" r="7" class="one-rd-diffusion-electron d3"></circle>
+                            </g>
                         </g>
+
+
+                        <!-- =====================================================
+                     RIGHT PANEL : D0 FAILURE
+                     ===================================================== -->
+                        <!-- =====================================================
+     RIGHT PANEL : D0 FAILURE
+     ===================================================== -->
+                        <g id="one-rd-d0-panel">
+
+                            <!-- 노란 패널 -->
+                            <rect x="590" y="160" width="430" height="390" class="one-rd-ref-panel"></rect>
+
+                            <!-- 세 slot: 같은 크기, 같은 y 시작점 -->
+                            <rect x="650" y="170" width="88" height="300" class="one-rd-blue-slot"></rect>
+                            <rect x="785" y="170" width="88" height="300" class="one-rd-open-slot"></rect>
+                            <rect x="920" y="170" width="88" height="300" class="one-rd-blue-slot"></rect>
+
+                            <!-- 오른쪽 패널 파란 U 실린더 -->
+                            <path d="M666 190
+             L722 190
+             L722 340
+             C722 392, 710 442, 694 466
+             C678 442, 666 392, 666 340
+             Z" class="one-rd-passive-blue"></path>
+
+                            <!-- 오른쪽 패널 살색 U 실린더 -->
+                            <path d="M801 190
+             L857 190
+             L857 340
+             C857 392, 845 442, 829 466
+             C813 442, 801 392, 801 340
+             Z" class="one-rd-passive-peach"></path>
+
+                            <!-- 오른쪽 패널 빨간 U 실린더 -->
+                            <path d="M936 190
+             L992 190
+             L992 340
+             C992 392, 980 442, 964 466
+             C948 442, 936 392, 936 340
+             Z" class="one-rd-d0-aggressor-red"></path>
+
+                            <!-- Aggressor label -->
+                            <text x="910" y="210" class="one-rd-ref-label">Aggressor</text>
+                            <path d="M910 218 L952 238" class="one-rd-small-black-arrow"
+                                marker-end="url(#one-rd-black-arrow)">
+                            </path>
+
+                            <!-- Victim capacitor -->
+                            <text x="896" y="50" text-anchor="middle" class="one-rd-victim-title">Victim</text>
+                            <line x1="896" y1="92" x2="896" y2="160" class="one-rd-cap-wire"></line>
+                            <rect x="869" y="64" width="54" height="26" rx="13" class="one-rd-cap-body"></rect>
+                            <ellipse cx="896" cy="64" rx="27" ry="8" class="one-rd-cap-top"></ellipse>
+                            <ellipse cx="896" cy="90" rx="27" ry="8" class="one-rd-cap-bottom"></ellipse>
+
+                            <!-- D0 victim column dots: 움직이지 않는 기준 점 -->
+                            <g id="one-rd-d0-victim-electrons">
+                                <circle cx="896" cy="198" r="7" class="one-rd-d0-victim-electron v1"></circle>
+                                <circle cx="896" cy="254" r="7" class="one-rd-d0-victim-electron v2"></circle>
+                                <circle cx="896" cy="310" r="7" class="one-rd-d0-victim-electron v3"></circle>
+                                <circle cx="896" cy="366" r="7" class="one-rd-d0-victim-electron v4"></circle>
+                            </g>
+
+                            <!-- D0 방향: Victim column에서 위 → 아래 disturbance -->
+                            <path d="M896 210 L896 382" class="one-rd-static-victim-arrow"
+                                marker-end="url(#one-rd-black-arrow)">
+                            </path>
+
+                            <path id="one-rd-d0-victim-disturb-arrow" d="M896 210 L896 382"
+                                class="one-rd-d0-victim-disturb-arrow" marker-end="url(#one-rd-red-arrow)">
+                            </path>
+
+                            <!-- D0 label -->
+                            <text x="742" y="528" class="one-rd-ref-label">Diffusion</text>
+                            <path d="M730 492 C770 510, 825 510, 878 492" class="one-rd-bracket-line"></path>
+
+                            <text x="915" y="528" class="one-rd-ref-label">Capture</text>
+                            <path d="M892 492 C922 510, 958 510, 990 492" class="one-rd-bracket-line"></path>
+
+                            <!-- 오른쪽 capture 영역: 배경 영역만 표시, 움직이는 electron 없음 -->
+                            <ellipse cx="950" cy="448" rx="72" ry="38" class="one-rd-d0-capture-zone"></ellipse>
+
+                            <!-- 오른쪽 capture 주변 정적 점: animation class 사용 안 함 -->
+                            <g id="one-rd-d0-capture-static-electrons">
+                                <circle cx="920" cy="430" r="8" class="one-rd-static-electron"></circle>
+                                <circle cx="940" cy="485" r="8" class="one-rd-static-electron"></circle>
+                                <circle cx="970" cy="495" r="8" class="one-rd-static-electron"></circle>
+                                <circle cx="995" cy="455" r="8" class="one-rd-static-electron"></circle>
+                            </g>
+
+                            <!-- D0 diffusion: Victim 아래쪽에서 출발해서 왼쪽 파란 WL 방향으로 이동 -->
+                            <path d="M900 405
+             C860 445, 800 462, 705 430" class="one-rd-static-diffusion-arrow" marker-end="url(#one-rd-black-arrow)">
+                            </path>
+
+                            <path id="one-rd-d0-diffusion-path" d="M900 405
+           C860 445, 800 462, 705 430" class="one-rd-d0-diffusion-path" marker-end="url(#one-rd-red-arrow)">
+                            </path>
+
+                        </g>
+
+                        <!-- 패널 하단 구분 라벨 -->
+                        <text x="285" y="580" text-anchor="middle" class="one-rd-failure-label">D1 Failure</text>
+                        <text x="805" y="580" text-anchor="middle" class="one-rd-failure-label">D0 Failure</text>
 
                     </svg>
 
                     <div class="figure-caption">
                         * 반복 활성화에 따른 victim charge disturbance를 개념적으로 표현했습니다.
-                        아래 방향 화살표는 특정 carrier 이동 방향을 확정한 것이 아니라 disturbance 누적과 data margin 감소를 나타냅니다.
+                        화살표는 특정 carrier 이동을 정량적으로 재현한 것이 아니라 disturbance 누적 방향을 나타냅니다.
                     </div>
 
                 </div>
