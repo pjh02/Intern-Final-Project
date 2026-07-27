@@ -479,3 +479,89 @@ const currentActivePage = document.querySelector(".page.active-page");
 if (!currentActivePage) {
     showPage("overview");
 }
+
+// =========================================================
+// PPT hyperlink / URL hash로 특정 page 바로 열기
+// 예: /#gidl, /#pge, /#one-rd
+// =========================================================
+
+function showPageById(pageId, updateHash = true) {
+    const targetPage = document.getElementById(pageId);
+
+    if (!targetPage || !targetPage.classList.contains("page")) {
+        return;
+    }
+
+    // 모든 page 숨기기
+    document.querySelectorAll(".page").forEach((page) => {
+        page.classList.remove("active-page");
+    });
+
+    // 선택 page만 보이기
+    targetPage.classList.add("active-page");
+
+    // nav active 표시 업데이트
+    document.querySelectorAll(".nav-link").forEach((link) => {
+        link.classList.remove("active-nav");
+        link.removeAttribute("aria-current");
+
+        if (link.dataset.page === pageId || link.getAttribute("href") === `#${pageId}`) {
+            link.classList.add("active-nav");
+            link.setAttribute("aria-current", "page");
+        }
+    });
+
+    // 주소창 hash 업데이트
+    if (updateHash && window.location.hash !== `#${pageId}`) {
+        history.pushState(null, "", `#${pageId}`);
+    }
+
+    // 항상 페이지 맨 위로 이동
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function openPageFromCurrentHash() {
+    const pageId = window.location.hash.replace("#", "");
+
+    if (!pageId) {
+        return;
+    }
+
+    showPageById(pageId, false);
+}
+
+// nav link 클릭 시 URL도 같이 바뀌게 만들기
+document.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", (event) => {
+        const pageId = link.dataset.page || link.getAttribute("href").replace("#", "");
+
+        if (!pageId) {
+            return;
+        }
+
+        event.preventDefault();
+        showPageById(pageId, true);
+    });
+});
+
+// overview card 클릭 시 URL도 같이 바뀌게 만들기
+document.querySelectorAll(".page-card").forEach((card) => {
+    card.addEventListener("click", () => {
+        const pageId = card.dataset.page;
+
+        if (!pageId) {
+            return;
+        }
+
+        showPageById(pageId, true);
+    });
+});
+
+// 처음 사이트 열 때 hash 확인
+window.addEventListener("DOMContentLoaded", openPageFromCurrentHash);
+
+// 이미 열린 상태에서 hash만 바뀔 때도 대응
+window.addEventListener("hashchange", openPageFromCurrentHash);
