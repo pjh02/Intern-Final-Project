@@ -708,9 +708,11 @@
                 <p class="eyebrow">Dynamic Interference Failure Mechanism</p>
                 <h2 class="nowrap-title">PGE: Pass Gate Effect</h2>
                 <p>
-                    PGE는 인접 Field Pass Word Line(FPWL)의 전계가 비선택 victim cell transistor에 결합하여
-                    channel energy barrier와 threshold voltage(Vth)를 낮추고,
-                    OFF-state subthreshold current를 증가시키는 adjacent-word-line interference입니다.
+                    PGE는 인접 Passing Word Line 또는 FPWL이 ACTIVE될 때 발생하는 전계 간섭으로,
+                    OFF 상태의 victim cell channel barrier와 effective Vth가 낮아지고
+                    subthreshold leakage가 증가하는 adjacent-word-line interference입니다.
+                    본 시각화는 1-RD의 D1 failure 그림 구조를 그대로 사용하되,
+                    불량 발생 메커니즘은 PGE에 맞게 표현합니다.
                 </p>
             </div>
 
@@ -723,39 +725,46 @@
 
                     <div class="panel-header">
                         <div>
-                            <h3>PGE 간섭 위치 및 누설 방향</h3>
-                            <p id="pge-status-text" aria-live="polite">버튼을 누르면 passing wordline에 의한 barrier lowering이
-                                표시됩니다.</p>
+                            <h3>PGE Field Coupling and D1 Margin Loss</h3>
+                            <p id="pge-status-text" aria-live="polite">
+                                버튼을 누르면 PGE Aggressor의 전계 간섭에 의한 Vth lowering과 D1 margin 감소가 표시됩니다.
+                            </p>
                         </div>
 
                         <div id="pge-state-badge" class="state-badge">대기 상태</div>
                     </div>
 
                     <!-- =====================================================
-                 PGE SVG 시각화 도면
-                 - 핵심:
-                   1. Victim cell의 wordline은 OFF
-                   2. 인접 passing wordline은 활성/전계 영향
-                   3. 인접 WL 전계가 victim cell의 barrier를 낮춤
-                   4. Storage node 전하가 누설될 가능성 증가
+                 PGE SVG
+                 - 1-RD D1 그림 구조 유지
+                 - 역할:
+                   왼쪽 파란색 = Neighbor WL / Passive
+                   가운데 피치색 = Victim WL / OFF
+                   오른쪽 빨간색 = PGE Aggressor / FPWL ACTIVE
+                 - 애니메이션:
+                   오른쪽 빨간 PGE Aggressor → 가운데 Victim WL 방향 field coupling
+                   Victim channel barrier lowering
+                   D1 stored charge margin 감소
                  ===================================================== -->
                     <svg id="pge-svg" viewBox="0 0 1100 620" role="img" focusable="false"
-                        aria-label="Pass Gate Effect threshold-voltage lowering and subthreshold leakage visualization">
+                        aria-label="PGE D1 failure conceptual visualization using the same layout as 1-RD D1 failure">
 
                         <defs>
-                            <!-- 파란 화살표: 인접 wordline 전계 영향 -->
+                            <marker id="pge-black-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
+                                orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#111827"></path>
+                            </marker>
+
                             <marker id="pge-blue-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
                                 orient="auto">
                                 <path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"></path>
                             </marker>
 
-                            <!-- 빨간 화살표: leakage 방향 -->
                             <marker id="pge-red-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3"
                                 orient="auto">
                                 <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"></path>
                             </marker>
 
-                            <!-- glow 효과 -->
                             <filter id="pge-glow">
                                 <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
                                 <feMerge>
@@ -763,242 +772,163 @@
                                     <feMergeNode in="SourceGraphic"></feMergeNode>
                                 </feMerge>
                             </filter>
-
-                            <!-- barrier 영역 패턴 -->
-                            <pattern id="pge-barrier-pattern" width="8" height="8" patternUnits="userSpaceOnUse"
-                                patternTransform="rotate(35)">
-                                <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="2"></line>
-                            </pattern>
                         </defs>
 
-                        <!-- 전체 도면 배경 -->
+                        <!-- 전체 배경 -->
                         <rect x="30" y="30" width="1040" height="560" rx="24" class="figure-bg"></rect>
 
+                        <!-- =====================================================
+                     왼쪽: 1-RD D1 그림과 같은 기본 panel
+                     ===================================================== -->
+                        <g id="pge-d1-style-panel">
 
-                        <!-- =================================================
-                     1. Victim cell capacitor / storage node
-                     ================================================= -->
+                            <!-- 노란 panel -->
+                            <rect x="70" y="160" width="430" height="390" class="pge-ref-panel"></rect>
 
-                        <!-- Cell capacitor -->
-                        <line x1="610" y1="72" x2="720" y2="72" class="capacitor-line"></line>
-                        <line x1="610" y1="96" x2="720" y2="96" class="capacitor-line"></line>
+                            <!-- 세 slot: 1-RD D1과 같은 배치 -->
+                            <rect x="130" y="170" width="88" height="300" class="pge-blue-slot"></rect>
+                            <rect x="265" y="170" width="88" height="300" class="pge-open-slot"></rect>
+                            <rect x="400" y="170" width="88" height="300" class="pge-blue-slot"></rect>
 
-                        <text x="590" y="54" class="figure-label-dark small-figure-text">Victim Cell Capacitor</text>
+                            <!-- 왼쪽 파란 U: Passive Neighbor WL -->
+                            <path d="M146 190
+                             L202 190
+                             L202 340
+                             C202 392, 190 442, 174 466
+                             C158 442, 146 392, 146 340
+                             Z" class="pge-neighbor-u"></path>
 
-                        <!-- Storage node contact -->
-                        <line x1="665" y1="96" x2="665" y2="242" class="storage-wire"></line>
-                        <circle cx="665" cy="242" r="7" class="contact-dot"></circle>
-                        <text x="690" y="142" class="side-label">Storage Node</text>
+                            <!-- 가운데 피치색 U: Victim WL / OFF -->
+                            <path d="M281 190
+                             L337 190
+                             L337 340
+                             C337 392, 325 442, 309 466
+                             C293 442, 281 392, 281 340
+                             Z" class="pge-passive-u pge-victim-wl-u"></path>
 
-                        <!-- 저장 전하: capacitor 아래쪽 / storage node 근처 -->
-                        <g id="pge-stored-charge">
-                            <circle class="pge-stored-charge" cx="625" cy="115" r="6"></circle>
-                            <circle class="pge-stored-charge" cx="648" cy="115" r="6"></circle>
-                            <circle class="pge-stored-charge" cx="682" cy="115" r="6"></circle>
-                            <circle class="pge-stored-charge" cx="705" cy="115" r="6"></circle>
+                            <!-- 오른쪽 빨간 U: PGE Aggressor / FPWL ACTIVE -->
+                            <path d="M416 190
+                             L472 190
+                             L472 340
+                             C472 392, 460 442, 444 466
+                             C428 442, 416 392, 416 340
+                             Z" class="pge-passing-wl-u pge-aggressor-u"></path>
+
+                            <!-- 왼쪽 label -->
+                            <text x="92" y="208" class="pge-ref-label">Neighbor</text>
+                            <text x="92" y="229" class="pge-small-label">PASSIVE</text>
+
+                            <!-- 가운데 Victim WL label -->
+                            <text x="309" y="145" text-anchor="middle" class="pge-ref-label">Victim WL</text>
+                            <text x="309" y="165" text-anchor="middle" class="pge-small-label">OFF</text>
+
+                            <!-- 오른쪽 PGE Aggressor label -->
+                            <text x="445" y="145" text-anchor="middle" class="pge-ref-label">PGE Aggr.</text>
+                            <text x="445" y="165" text-anchor="middle" class="pge-small-label">FPWL ACTIVE</text>
+                            <path d="M445 170 L445 205" class="pge-small-black-arrow"
+                                marker-end="url(#pge-black-arrow)">
+                            </path>
+
+                            <!-- Victim capacitor: 1-RD D1 구조 유지 -->
+                            <text x="376" y="50" text-anchor="middle" class="pge-victim-title">Victim</text>
+                            <line x1="376" y1="92" x2="376" y2="160" class="pge-cap-wire"></line>
+                            <rect x="349" y="64" width="54" height="26" rx="13" class="pge-cap-body"></rect>
+                            <ellipse cx="376" cy="64" rx="27" ry="8" class="pge-cap-top"></ellipse>
+                            <ellipse cx="376" cy="90" rx="27" ry="8" class="pge-cap-bottom"></ellipse>
+
+                            <!-- D1 stored charge -->
+                            <g id="pge-d1-stored-charge">
+                                <circle cx="376" cy="198" r="7" class="pge-stored-charge c1"></circle>
+                                <circle cx="376" cy="254" r="7" class="pge-stored-charge c2"></circle>
+                                <circle cx="376" cy="310" r="7" class="pge-stored-charge c3"></circle>
+                            </g>
+
+                            <!-- D1 margin loss 방향: 아래 방향 -->
+                            <path d="M376 230 L376 338" class="pge-static-margin-arrow"
+                                marker-end="url(#pge-black-arrow)">
+                            </path>
+
+                            <path id="pge-margin-loss-arrow" d="M376 230 L376 338" class="pge-margin-loss-arrow"
+                                marker-end="url(#pge-red-arrow)">
+                            </path>
+
+                            <!-- PGE 핵심 1: 오른쪽 PGE Aggressor → 가운데 Victim WL 방향 전계 간섭 -->
+                            <path d="M444 245
+                             C410 285, 365 335, 315 405" class="pge-field-coupling-path"
+                                marker-end="url(#pge-blue-arrow)">
+                            </path>
+
+                            <path d="M444 305
+                             C405 330, 365 365, 315 430" class="pge-field-coupling-path pge-field-coupling-secondary"
+                                marker-end="url(#pge-blue-arrow)">
+                            </path>
+
+                            <!-- PGE 핵심 2: Victim WL 아래 channel barrier lowering -->
+                            <ellipse cx="315" cy="430" rx="88" ry="38" class="pge-barrier-lowering-zone"></ellipse>
+
+                            <!-- Barrier lowering label -->
+                            <text x="250" y="505" class="pge-ref-label">Vth Lowering</text>
+                            <text x="236" y="528" class="pge-small-label">Subthreshold Leakage ↑</text>
+
+                            <!-- PGE 핵심 3: Subthreshold leakage path
+                         Victim stored charge가 lowered barrier를 지나 source/neighbor 쪽으로 빠지는 개념 -->
+                            <path id="pge-subthreshold-leakage-path" d="M376 405
+                           C350 428, 315 442, 270 438
+                           C225 434, 190 420, 165 400" class="pge-subthreshold-leakage-path"
+                                marker-end="url(#pge-red-arrow)">
+                            </path>
+
+                            <text x="122" y="490" class="pge-small-label">Leakage path</text>
+
+                            <!-- 하단 라벨 -->
+                            <text x="285" y="580" text-anchor="middle" class="pge-failure-label">
+                                PGE-induced D1 Failure
+                            </text>
                         </g>
 
 
-                        <!-- =================================================
-                     2. P-type substrate
-                     ================================================= -->
+                        <!-- =====================================================
+                     오른쪽: Energy Barrier inset
+                     ===================================================== -->
+                        <g id="pge-barrier-inset">
 
-                        <path class="substrate-body" d="M210 242
-                       L410 242
-                       L410 206
-                       L610 206
-                       L610 242
-                       L760 242
-                       L760 206
-                       L960 206
-                       L960 242
-                       L960 500
-                       L210 500
-                       Z">
-                        </path>
+                            <rect x="610" y="150" width="420" height="330" rx="22" class="pge-inset-panel"></rect>
 
-                        <text x="250" y="474" class="substrate-label">P-type Substrate</text>
+                            <text x="820" y="195" text-anchor="middle" class="pge-inset-title">
+                                Energy Barrier View
+                            </text>
 
-                        <!-- substrate ground -->
-                        <line x1="540" y1="500" x2="540" y2="548" class="ground-line"></line>
-                        <line x1="522" y1="548" x2="558" y2="548" class="ground-line"></line>
-                        <line x1="528" y1="556" x2="552" y2="556" class="ground-line"></line>
-                        <line x1="534" y1="564" x2="546" y2="564" class="ground-line"></line>
+                            <!-- axis -->
+                            <line x1="675" y1="375" x2="960" y2="375" class="pge-inset-axis"></line>
+                            <line x1="675" y1="375" x2="675" y2="235" class="pge-inset-axis"></line>
 
-
-                        <!-- =================================================
-                     3. Victim access transistor
-                     ================================================= -->
-
-                        <!-- Victim Wordline OFF -->
-                        <line x1="510" y1="70" x2="510" y2="110" class="terminal-line"></line>
-                        <circle cx="510" cy="64" r="5" class="terminal-dot"></circle>
-                        <text x="492" y="50" class="figure-title">VWL</text>
-
-                        <rect x="410" y="110" width="200" height="78" rx="4" class="pge-victim-gate"></rect>
-                        <text x="455" y="148" class="figure-label-dark">Victim WL</text>
-                        <text x="474" y="172" class="mini-label">OFF</text>
-
-                        <rect x="410" y="188" width="200" height="18" rx="2" class="oxide-strip"></rect>
-                        <text x="473" y="202" class="oxide-text">Gate Oxide</text>
-
-                        <!-- Bitline / source -->
-                        <line x1="310" y1="90" x2="310" y2="242" class="terminal-line"></line>
-                        <circle cx="310" cy="84" r="5" class="terminal-dot"></circle>
-                        <text x="270" y="70" class="side-label">Bitline</text>
-
-                        <!-- Source diffusion -->
-                        <path class="sd-block" d="M210 242
-                       L410 242
-                       L410 358
-                       Q410 385 380 385
-                       L210 385
-                       Z">
-                        </path>
-                        <text x="285" y="315" class="figure-label-white">Source</text>
-
-                        <!-- Drain diffusion / storage node side -->
-                        <path class="sd-block" d="M610 242
-                       L760 242
-                       L760 385
-                       L650 385
-                       Q610 385 610 342
-                       Z">
-                        </path>
-                        <text x="635" y="315" class="figure-label-white">Drain</text>
-
-                        <!-- Victim channel / barrier -->
-                        <path class="pge-channel-line" d="M410 365 C465 390, 555 390, 610 365">
-                        </path>
-
-                        <!-- 원래 높았던 barrier -->
-                        <path class="pge-normal-barrier" d="M430 340
-                       C465 300, 555 300, 590 340
-                       L590 365
-                       C555 338, 465 338, 430 365
-                       Z">
-                        </path>
-
-                        <text x="443" y="420" class="mini-label">OFF 상태 barrier</text>
-
-
-                        <!-- =================================================
-                     4. Passing wordline / adjacent active WL
-                     ================================================= -->
-
-                        <!-- Passing WL terminal -->
-                        <line x1="860" y1="70" x2="860" y2="110" class="terminal-line"></line>
-                        <circle cx="860" cy="64" r="5" class="terminal-dot"></circle>
-                        <text x="842" y="50" class="figure-title">VPW</text>
-
-                        <rect x="760" y="110" width="200" height="78" rx="4" class="pge-passing-gate"></rect>
-                        <text x="800" y="148" class="figure-label-dark">Passing WL</text>
-                        <text x="818" y="172" class="mini-label">ACTIVE</text>
-
-                        <rect x="760" y="188" width="200" height="18" rx="2" class="oxide-strip"></rect>
-                        <text x="823" y="202" class="oxide-text">Gate Oxide</text>
-
-                        <!-- adjacent diffusion / dummy region -->
-                        <path class="pge-adjacent-region" d="M760 242
-                       L960 242
-                       L960 385
-                       L800 385
-                       Q760 385 760 342
-                       Z">
-                        </path>
-
-                        <text x="790" y="315" class="figure-label-white">Adjacent Cell</text>
-
-
-                        <!-- =================================================
-                     5. Passing WL electric field coupling
-                     ================================================= -->
-
-                        <path class="pge-coupling-zone" d="M740 205
-                       C710 235, 675 260, 635 285
-                       C590 313, 555 330, 520 345
-                       L520 385
-                       C585 365, 660 330, 730 280
-                       C780 245, 825 225, 880 210
-                       Z">
-                        </path>
-
-                        <text x="675" y="455" class="depletion-label strong">Passing WL 전계 간섭</text>
-
-                        <line x1="820" y1="205" x2="690" y2="270" class="pge-field-arrow"
-                            marker-end="url(#pge-blue-arrow)">
-                        </line>
-
-                        <line x1="860" y1="215" x2="650" y2="310" class="pge-field-arrow"
-                            marker-end="url(#pge-blue-arrow)">
-                        </line>
-
-                        <line x1="880" y1="238" x2="585" y2="350" class="pge-field-arrow"
-                            marker-end="url(#pge-blue-arrow)">
-                        </line>
-
-
-                        <!-- =================================================
-                     6. Lowered barrier / PGE hotspot
-                     ================================================= -->
-
-                        <path class="pge-lowered-barrier" d="M430 350
-                       C475 335, 555 335, 610 350
-                       L610 370
-                       C555 365, 475 365, 430 370
-                       Z">
-                        </path>
-
-                        <ellipse id="pge-hotspot" cx="610" cy="350" rx="70" ry="42" class="pge-hotspot"></ellipse>
-
-                        <text x="625" y="335" class="svg-small pge-hotspot-label">Vth lowering</text>
-                        <text x="625" y="355" class="svg-small pge-hotspot-label">Subthreshold leakage ↑</text>
-
-
-                        <!-- =================================================
-                     7. PGE leakage direction
-                     - Storage node -> lowered barrier -> Bitline/body 방향
-                     - 전자 dot 이동 대신 빨간 화살표 흐름으로 표현
-                     ================================================= -->
-
-                        <path id="pge-leakage-path-1" d="M665 138
-                       C665 190, 665 235, 665 260
-                       C655 305, 630 335, 610 350" class="pge-leakage-path" marker-end="url(#pge-red-arrow)">
-                        </path>
-
-                        <path id="pge-leakage-path-2" d="M610 350
-                       C565 365, 500 368, 435 360
-                       C390 355, 350 350, 310 342" class="pge-leakage-path" marker-end="url(#pge-red-arrow)">
-                        </path>
-
-                        <text x="328" y="335" class="svg-small pge-leakage-label">
-                            Subthreshold-current path
-                        </text>
-
-
-                        <!-- =================================================
-                     8. Energy barrier inset
-                     ================================================= -->
-
-                        <g id="pge-band-box">
-                            <rect x="815" y="410" width="225" height="120" rx="18" class="band-panel"></rect>
-
-                            <text x="840" y="438" class="figure-label-dark small-figure-text">Energy Barrier</text>
-
-                            <!-- original high barrier -->
-                            <path d="M845 490 C880 435, 930 435, 965 490" class="pge-high-barrier-line"></path>
-                            <text x="850" y="512" class="mini-label">OFF barrier</text>
+                            <!-- normal OFF barrier -->
+                            <path d="M700 350
+                             C760 235, 875 235, 935 350" class="pge-inset-normal-barrier">
+                            </path>
 
                             <!-- lowered barrier -->
-                            <path d="M845 475 C885 455, 925 455, 965 475" class="pge-low-barrier-line"></path>
-                            <text x="925" y="512" class="mini-label">Lowered</text>
+                            <path d="M700 337
+                             C765 300, 870 300, 935 337" class="pge-inset-lowered-barrier">
+                            </path>
+
+                            <text x="700" y="410" class="pge-small-label">OFF Barrier</text>
+                            <text x="830" y="410" class="pge-small-label">Lowered Barrier</text>
+
+                            <!-- Vth lowering 강조 -->
+                            <text x="820" y="270" text-anchor="middle" class="pge-vth-down-text">Vth ↓</text>
+
+                            <text x="690" y="450" class="pge-small-label">
+                                Barrier가 낮아지면 OFF-state leakage가 증가
+                            </text>
                         </g>
 
                     </svg>
 
                     <div class="figure-caption">
-                        * FPWL 전계 결합 → victim Vth lowering → subthreshold current 증가의 흐름을 나타낸 단순화 도식입니다.
-                        실제 Vth 변화량과 전류는 geometry, bias, oxide/trap 조건에 따라 달라집니다.
+                        * 그림 구조는 1-RD D1 Failure와 유사하게 유지했습니다.
+                        단, PGE에서는 오른쪽 빨간 FPWL/PGE Aggressor가 전계 간섭을 만들고,
+                        가운데 Victim WL 아래 barrier가 낮아지는 흐름으로 해석합니다.
                     </div>
 
                 </div>
@@ -1012,26 +942,26 @@
                     <h3>PGE 핵심 설명</h3>
 
                     <div class="info-box">
-                        <h4>1. Victim cell은 OFF 상태</h4>
+                        <h4>1. PGE Aggressor 활성화</h4>
                         <p>
-                            Victim cell의 wordline은 OFF 상태이므로 원래는 access transistor가
-                            저장 전하를 잘 막아야 합니다.
+                            인접 FPWL 또는 Passing WL이 ACTIVE가 되면, 이 WL이 PGE aggressor 역할을 하며
+                            OFF 상태의 victim cell 주변으로 전계 간섭을 유발합니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>2. Vth lowering</h4>
+                        <h4>2. Victim WL 아래 barrier lowering</h4>
                         <p>
-                            인접 FPWL이 활성화되면 전계 결합으로 victim channel의 energy barrier와
-                            effective threshold voltage가 낮아질 수 있습니다.
+                            PGE aggressor의 전계 결합은 victim WL 아래 channel energy barrier를 낮추고,
+                            effective threshold voltage가 낮아진 것처럼 동작하게 만듭니다.
                         </p>
                     </div>
 
                     <div class="info-box">
-                        <h4>3. Subthreshold leakage 증가</h4>
+                        <h4>3. D1 failure dominant</h4>
                         <p>
-                            Vth가 낮아지면 victim transistor가 OFF 상태여도 subthreshold current가 증가하여
-                            storage-node voltage가 원치 않게 변할 수 있습니다.
+                            Barrier가 낮아지면 OFF 상태에서도 subthreshold leakage가 증가하고,
+                            D1 저장 상태의 charge margin이 감소하여 D1 failure가 주로 나타날 수 있습니다.
                         </p>
                     </div>
 
@@ -1048,21 +978,25 @@
                     <div class="note-box">
                         <h4>핵심 요약</h4>
                         <p>
-                            “PGE는 인접 FPWL의 전계가 victim transistor의 Vth를 낮추고
-                            OFF-state subthreshold current를 증가시키는 adjacent-word-line interference입니다.”
+                            “PGE는 FPWL/PGE Aggressor의 전계 간섭이 victim transistor의 Vth를 낮추고,
+                            subthreshold leakage를 증가시켜 D1 margin을 감소시키는 메커니즘입니다.”
                         </p>
                     </div>
 
                     <div class="warning-box">
-                        <h4>메커니즘 구분</h4>
+                        <h4>1-RD와의 차이</h4>
                         <p>
-                            PGE의 핵심은 gate 자체의 tunneling leakage가 아니라 인접 WL의 electrostatic coupling입니다.
-                            따라서 Vth shift와 subthreshold-current change를 중심으로 해석합니다.
+                            1-RD는 반복 activation에 의한 capture/diffusion/trap-related disturbance를 강조하지만,
+                            PGE는 PGE aggressor의 electrostatic coupling에 의한 barrier lowering과
+                            subthreshold leakage 증가가 핵심입니다.
                         </p>
                     </div>
 
                     <div class="source-note">
                         <span>참고 문헌</span>
+                        <a href="https://doi.org/10.3390/electronics13244936" target="_blank" rel="noopener noreferrer">
+                            Electronics 2024 — PGE / 1-RH comparison
+                        </a>
                         <a href="https://doi.org/10.5573/JSTS.2023.23.4.236" target="_blank" rel="noopener noreferrer">
                             Kim et al., JSTS 2023
                         </a>
